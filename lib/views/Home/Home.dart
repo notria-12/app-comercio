@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,11 +35,11 @@ class _HomePageState extends State<HomePage> {
                   child: GestureDetector(
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      color: Colors.green,
+                      color: Colors.black12,
                       child: Text(
                         'Categoria',
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
+                        // style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -52,10 +53,10 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      color: Colors.amber,
+                      color: Colors.black12,
                       child: Text(
                         'Filtros',
-                        style: TextStyle(color: Colors.white),
+                        // style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -63,7 +64,8 @@ class _HomePageState extends State<HomePage> {
                 )
               ],
             ),
-          )
+          ),
+          ProductCard()
         ],
       ),
     );
