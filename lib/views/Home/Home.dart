@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           Container(
             // height: 40,
             width: double.maxFinite,
-            color: Colors.black12,
+            color: Colors.white,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -35,14 +35,20 @@ class _HomePageState extends State<HomePage> {
                   child: GestureDetector(
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      color: Colors.black12,
+                      // color: Colors.black12,
                       child: Text(
                         'Categoria',
+                        style: TextStyle(fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                         // style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
+                ),
+                VerticalDivider(
+                  color: Colors.amberAccent,
+                  width: 3,
+                  thickness: 5,
                 ),
                 Expanded(
                   flex: 1,
@@ -53,10 +59,10 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      color: Colors.black12,
+                      // color: Colors.black12,
                       child: Text(
                         'Filtros',
-                        // style: TextStyle(color: Colors.white),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -65,9 +71,30 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          ProductCard()
+          Expanded(
+            child: ListView(
+              children: [
+                ProductCard(),
+                ProductCard(),
+                ProductCard(),
+                ProductCard(),
+                ProductCard(),
+                ProductCard(),
+                ProductCard()
+              ],
+            ),
+          )
         ],
       ),
     );
+  }
+}
+
+class CategoryWidget extends StatelessWidget {
+  const CategoryWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

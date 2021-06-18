@@ -9,14 +9,45 @@ class ProductCard extends StatelessWidget {
       // width: double.maxFinite,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.black12),
-      child: Row(
-        children: [
-          Expanded(
-              child: Image.network(
-            'https://firebasestorage.googleapis.com/v0/b/comercio-6d23d.appspot.com/o/img_estab%2F-MV7bV82uiGR2aVZAG2g?alt=media&token=25156e81-c7f8-4446-aa6e-5bfd54615a74',
-            scale: 1,
-          ))
-        ],
+      child: Card(
+        child: Row(
+          children: [
+            Container(
+              height: 80,
+              width: 85,
+              child: Image.asset(
+                'assets/img/eletro-fase.jpeg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              color: Colors.blueAccent,
+              height: 80,
+              width: 3,
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(left: 4),
+                height: 80,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Eletro Fase',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      'Alameda Demétrico Cavlak, 2094 - Centro, Lucélia',
+                      style: TextStyle(fontSize: 10),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
