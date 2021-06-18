@@ -4,7 +4,7 @@ import 'package:loja_virtual/views/Home/Home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final FirebaseApp app = await Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

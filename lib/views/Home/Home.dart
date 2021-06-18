@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/widgets/product_card.dart';
 
@@ -9,6 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final fb = FirebaseDatabase.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +70,14 @@ class _HomePageState extends State<HomePage> {
           ),
           ProductCard(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final ref = fb.reference();
+          await ref.child('categorias').update({'teste': 'testando'});
+          print('Pronto');
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
