@@ -3,9 +3,9 @@ import 'dart:convert';
 class ProductService {
   String _imagePath;
   String _name;
-  String _address;
+  // String _address;
 
-  ProductService(this._imagePath, this._name, this._address);
+  ProductService(this._imagePath, this._name);
 
   // ProductService copyWith({
   //   String? _imagePath,

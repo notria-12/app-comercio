@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
 import 'package:loja_virtual/src/widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -84,13 +85,15 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: ListView(
               children: [
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-                ProductCard(),
-                ProductCard()
+                GestureDetector(
+                  child: ProductCard(),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProductServiceDetails()));
+                  },
+                )
               ],
             ),
           )
