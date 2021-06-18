@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   flex: 1,
                   child: InkWell(
-                    mouseCursor: MouseCursor.defer,
+                    // mouseCursor: MouseCursor.defer,
                     onTap: () {
                       print('Sensacional');
                     },
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          ProductCard()
+          ProductCard(),
         ],
       ),
     );
