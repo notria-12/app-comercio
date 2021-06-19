@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 class ProductService {
+  // String _id;
   String _imagePath;
   String _name;
-  // String _address;
+  String _address;
 
-  ProductService(this._imagePath, this._name);
+  ProductService(this._imagePath, this._name, this._address);
 
   // ProductService copyWith({
   //   String? _imagePath,
@@ -17,17 +18,24 @@ class ProductService {
   //   );
   // }
 
+  String get name => _name;
+  String get imagePath => _imagePath;
+  String get address => _address;
+
   Map<String, dynamic> toMap() {
     return {
-      'imagePath': _imagePath,
-      'name': _name,
+      'est_urlimagem': _imagePath,
+      'est_fantasia': _name,
+      'est_address': _address
     };
   }
 
-  factory ProductService.fromMap(Map<String, dynamic> map) {
+  factory ProductService.fromMap(Map map) {
     return ProductService(
-      map['_imagePath'],
-      map['_name'],
+      map['est_urlimagem'] ??
+          'https://img.freepik.com/vetores-gratis/ilustracao-de-um-loja-padaria_53876-26746.jpg?size=338&ext=jpg',
+      map['est_fantasia'] ?? 'Sem nome',
+      map['est_address'] ?? 'Sem endereço',
     );
   }
 

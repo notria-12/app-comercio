@@ -82,6 +82,30 @@ class ProductServiceDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Divider(
+                height: 4,
+                color: Colors.black12,
+                thickness: 1,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Categoria',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Serviço, Eletríca',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+              ),
+            ),
           ],
         ),
       ),

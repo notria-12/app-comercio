@@ -1,5 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
+import 'package:loja_virtual/src/models/ProductService.dart';
+import 'package:loja_virtual/src/repository/ProductServiceRepository.dart';
 import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
 import 'package:loja_virtual/src/widgets/product_card.dart';
 
@@ -12,6 +15,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final fb = FirebaseDatabase.instance;
+  ProductServiceController productServiceController =
+      ProductServiceController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,20 +88,29 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              children: [
-                GestureDetector(
-                  child: ProductCard(),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductServiceDetails()));
-                  },
-                )
-              ],
-            ),
-          )
+              child: FutureBuilder<List<ProductService>>(
+            future: productServiceController.getProductServiceList(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                  break;
+                case ConnectionState.done:
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      var lista = snapshot.data ?? [];
+                      return ProductCard(lista[index]);
+                    },
+                  );
+                  break;
+                default:
+                  return Text('Default');
+              }
+            },
+          ))
         ],
       ),
     );

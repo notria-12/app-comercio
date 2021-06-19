@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/models/ProductService.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final ProductService _productService;
+  const ProductCard(this._productService, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: double.maxFinite,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: Colors.black12),
       child: Card(
@@ -15,8 +16,8 @@ class ProductCard extends StatelessWidget {
             Container(
               height: 90,
               width: 90,
-              child: Image.asset(
-                'assets/img/eletro-fase.jpeg',
+              child: Image.network(
+                _productService.imagePath,
                 fit: BoxFit.cover,
               ),
             ),
@@ -35,12 +36,12 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'Eletro Fase',
+                      _productService.name,
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
                     ),
                     Text(
-                      'Alameda Demétrico Cavlak, 2094 - Centro, Lucélia',
+                      _productService.address,
                       style: TextStyle(fontSize: 11),
                     )
                   ],
