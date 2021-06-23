@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loja_virtual/src/models/ProductService.dart';
 
 class ProductServiceDetails extends StatelessWidget {
-  const ProductServiceDetails({Key? key}) : super(key: key);
+  final ProductService _productService;
+  const ProductServiceDetails(this._productService, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +43,12 @@ class ProductServiceDetails extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.4,
                 color: Colors.black12,
                 child: Center(
-                  child: Image.asset('assets/img/eletro-fase.jpeg'),
+                  child: Image.network(_productService.imagePath),
                 )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Eletro Fase',
+                _productService.name,
                 textAlign: TextAlign.start,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
@@ -53,7 +56,7 @@ class ProductServiceDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Alameda Demétrico Cavlak, 2094 - Centro, Lucélia',
+                _productService.address,
                 textAlign: TextAlign.start,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
               ),

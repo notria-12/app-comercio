@@ -9,7 +9,6 @@ class ProductServiceController {
 
     productServiceData.getData().then((productServices) {
       productServices.forEach((k, v) {
-        // print(v['est_fantasia']);
         prdtServices.add(ProductService.fromMap(v));
       });
       return prdtServices;
