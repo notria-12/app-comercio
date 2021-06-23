@@ -2,9 +2,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
+import 'package:loja_virtual/src/views/Category/Category.dart';
 import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
 import 'package:loja_virtual/src/widgets/product_card.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,15 +14,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final fb = FirebaseDatabase.instance;
+  // final fb = FirebaseDatabase.instance;
   ProductServiceController productServiceController =
       ProductServiceController();
-  // Future<List<ProductService>> _loadProductServices;
+  late Future<List<ProductService>> _futureProducts;
+  var list;
 
   @override
   void initState() {
     super.initState();
-    // _loadProductServices = productServiceController.getProductServiceList();
+    _futureProducts = productServiceController.getProductServiceList();
   }
 
   @override
@@ -35,8 +36,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                final result =
-                    showSearch(context: context, delegate: SearchBar());
+                showSearch(context: context, delegate: SearchBar(list));
               }),
           IconButton(onPressed: () => {}, icon: Icon(Icons.favorite_border))
         ],
@@ -56,7 +56,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   flex: 1,
-                  child: GestureDetector(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CategoryPage()));
+                    },
                     child: Container(
                       padding: EdgeInsets.all(10),
                       child: Text(
@@ -96,7 +102,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
               child: FutureBuilder<List<ProductService>>(
-            future: productServiceController.getProductServiceList(),
+            future: _futureProducts,
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -105,25 +111,32 @@ class _HomePageState extends State<HomePage> {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
-                    break;
                   }
                 case ConnectionState.done:
+                  print('DONE: ${snapshot.hasData}');
+                  print('DONE LISTA: ${snapshot.data}');
+                  if (!snapshot.hasData)
+                    return Center(
+                      child: Text('Carregando...'),
+                    );
+
                   return ListView.builder(
+                    itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
-                      var lista = snapshot.data ?? [];
+                      list = snapshot.data ?? [];
                       return GestureDetector(
-                        child: ProductCard(lista[index]),
+                        child: ProductCard(list[index]),
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      ProductServiceDetails(lista[index])));
+                                      ProductServiceDetails(list[index])));
                         },
                       );
                     },
                   );
-                  break;
+
                 default:
                   return Text('Default');
               }
@@ -136,9 +149,14 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SearchBar extends SearchDelegate<String> {
-  final cities = ['Caxias', 'Teresina', 'Timon', 'São Luís', 'Natal', 'Palmas'];
+  final List<ProductService> productServiceList;
 
-  final recentCities = ['Caxias', 'Timon', 'Natal'];
+  SearchBar(this.productServiceList);
+  final List<ProductService> recentProducts = [
+    ProductService('_imagePath', 'Americana', '_address'),
+    ProductService('_imagePath', 'Med Cardio', '_address'),
+    ProductService('_imagePath', 'Dirami', '_address')
+  ];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -184,31 +202,32 @@ class SearchBar extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = query.isEmpty
-        ? recentCities
-        : cities.where((city) {
-            final cityLower = city.toLowerCase();
+        ? recentProducts
+        : productServiceList.where((product) {
+            final productLower = product.name.toLowerCase();
+            // print('Product $productLower');
             final queryLower = query.toLowerCase();
 
-            return cityLower.startsWith(queryLower);
+            return productLower.startsWith(queryLower);
           }).toList();
 
     return buildSuggestionsSuccess(suggestions);
   }
 
-  Widget buildSuggestionsSuccess(List<String> suggestions) {
+  Widget buildSuggestionsSuccess(List<dynamic> suggestions) {
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (context, index) {
         final suggestion = suggestions[index];
 
-        return ListTile(
+        return GestureDetector(
+          child: ProductCard(suggestion),
           onTap: () {
-            query = suggestion;
-
-            showResults(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProductServiceDetails(suggestion)));
           },
-          leading: Icon(Icons.location_city),
-          title: Text(suggestion),
         );
       },
     );

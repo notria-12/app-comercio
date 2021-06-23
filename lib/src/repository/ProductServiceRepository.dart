@@ -5,9 +5,7 @@ class ProductServiceRepository {
       FirebaseDatabase.instance.reference().child('estabelecimento');
 
   Future getData() async {
-    return productServiceReference
-        .once()
-        .then((snap) => snap.value)
-        .catchError((e) => e.message);
+    var snap = await productServiceReference.once();
+    return snap.value;
   }
 }
