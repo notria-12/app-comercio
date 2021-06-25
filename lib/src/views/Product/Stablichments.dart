@@ -31,7 +31,7 @@ class _StablichmentsPageState extends State<StablichmentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Estabelecimentos'),
+        title: Text('Filtro Categoria'),
       ),
       body: Column(
         children: [
@@ -91,7 +91,7 @@ class _StablichmentsPageState extends State<StablichmentsPage> {
                             children: [
                               Image.asset('assets/img/empty_state.png'),
                               Text(
-                                  'Infelizmente ainda não temos estabelecimento pra essa categoria!',
+                                  'Infelizmente ainda não temos produtos ou serviços pra essa categoria!',
                                   style: TextStyle(
                                       color: Colors.blueAccent, fontSize: 16),
                                   textAlign: TextAlign.center)

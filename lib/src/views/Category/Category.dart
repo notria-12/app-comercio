@@ -11,7 +11,7 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   late Future<List<Category>> _futureCategories;
   CategoryController categoryController = CategoryController();
-
+  var categories;
   @override
   void initState() {
     super.initState();
@@ -24,6 +24,13 @@ class _CategoryPageState extends State<CategoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Categorias'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: SearchBar(categories));
+              })
+        ],
       ),
       body: Container(
         padding: EdgeInsets.all(8),
@@ -57,41 +64,11 @@ class _CategoryPageState extends State<CategoryPage> {
                       }
                     case ConnectionState.done:
                       {
-                        var categories = snapshot.data ?? [];
+                        categories = snapshot.data ?? [];
                         return ListView.builder(
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => StablichmentsPage(
-                                            categories[index])));
-                              },
-                              splashColor: Colors.blueAccent,
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 2),
-                                color: Colors.white,
-                                padding: EdgeInsets.all(16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        categories[index].description,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ),
-                                    Icon(Icons.arrow_forward_ios)
-                                  ],
-                                ),
-                              ),
-                            );
+                            return CategoryCard(categorie: categories[index]);
                           },
                         );
                       }
@@ -105,5 +82,142 @@ class _CategoryPageState extends State<CategoryPage> {
         ),
       ),
     );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  const CategoryCard({
+    Key? key,
+    required this.categorie,
+  }) : super(key: key);
+
+  final Category categorie;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => StablichmentsPage(categorie)));
+      },
+      splashColor: Colors.blueAccent,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 2),
+        color: Colors.white,
+        padding: EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                categorie.description,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SearchBar extends SearchDelegate<String> {
+  final List<Category> categoriesList;
+
+  SearchBar(this.categoriesList);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            if (query.isEmpty) {
+              close(context, '');
+            } else {
+              query = '';
+              showSuggestions(context);
+            }
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.arrow_back), onPressed: () => close(context, ''));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final suggestions = query.isEmpty
+        ? []
+        : categoriesList.where((category) {
+            final categoryLower = category.description.toLowerCase();
+            // print('category $categoryLower');
+            final queryLower = query.toLowerCase();
+
+            return categoryLower.startsWith(queryLower);
+          }).toList();
+
+    return buildSuggestionsSuccess(suggestions);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestions = query.isEmpty
+        ? []
+        : categoriesList.where((category) {
+            final categoryLower = category.description.toLowerCase();
+            // print('category $categoryLower');
+            final queryLower = query.toLowerCase();
+
+            return categoryLower.startsWith(queryLower);
+          }).toList();
+
+    return buildSuggestionsSuccess(suggestions);
+  }
+
+  Widget buildSuggestionsSuccess(List<dynamic> suggestions) {
+    return suggestions.length > 0
+        ? ListView.builder(
+            itemCount: suggestions.length,
+            itemBuilder: (context, index) {
+              final suggestion = suggestions[index];
+
+              return GestureDetector(
+                child: CategoryCard(
+                  categorie: suggestion,
+                ),
+                onTap: () {
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) =>
+                  //             ProductServiceDetails(suggestion)));
+                },
+              );
+            },
+          )
+        : Center(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/img/search.png'),
+                  Text(
+                      'Procure pelo nome do estabelecimento, produto ou serviço',
+                      style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                      textAlign: TextAlign.center)
+                ],
+              ),
+            ),
+          );
   }
 }

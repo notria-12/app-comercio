@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductServiceDetails extends StatelessWidget {
   final ProductService _productService;
@@ -22,17 +23,19 @@ class ProductServiceDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () {},
-            child: IconButton(
-              icon: Icon(Icons.map),
-              onPressed: () {},
-            ),
+            onPressed: () {
+              abrirGoogleMaps();
+            },
+            child: Icon(Icons.map),
           ),
           SizedBox(
             width: 8,
           ),
           FloatingActionButton(
-              onPressed: () {}, child: FaIcon(FontAwesomeIcons.whatsapp)),
+              onPressed: () {
+                abrirWhatsApp();
+              },
+              child: FaIcon(FontAwesomeIcons.whatsapp)),
         ],
       ),
       body: SingleChildScrollView(
@@ -113,5 +116,31 @@ class ProductServiceDetails extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  abrirGoogleMaps() async {
+    String urlMap =
+        'https://www.google.com/maps/search/?api=1&query=${_productService.latitude},${_productService.longitude}';
+    if (await canLaunch(urlMap)) {
+      await launch(urlMap);
+    } else {
+      throw 'Could not launch Maps';
+    }
+  }
+
+  abrirWhatsApp() async {
+    String number =
+        '+55' + _productService.phoneNumber.replaceAll(RegExp(r'\D'), '');
+    if (number.isEmpty) {
+      print('Sem numero');
+    } else {
+      var whatsappUrl = "whatsapp://send?phone=$number=Olá,tudo bem ?";
+
+      if (await canLaunch(whatsappUrl)) {
+        await launch(whatsappUrl);
+      } else {
+        throw 'Could not launch $whatsappUrl';
+      }
+    }
   }
 }
