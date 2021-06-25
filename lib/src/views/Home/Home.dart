@@ -145,11 +145,11 @@ class SearchBar extends SearchDelegate<String> {
   final List<ProductService> productServiceList;
 
   SearchBar(this.productServiceList);
-  final List<ProductService> recentProducts = [
-    ProductService('_imagePath', 'Americana', '_address', 0, 2, '', '', []),
-    ProductService('_imagePath', 'Med Cardio', '_address', 0, 2, '', '', []),
-    ProductService('_imagePath', 'Dirami', '_address', 0, 2, '', '', [])
-  ];
+  // final List<ProductService> recentProducts = [
+  //   ProductService('_imagePath', 'Americana', '_address', 0, 2, '', '', []),
+  //   ProductService('_imagePath', 'Med Cardio', '_address', 0, 2, '', '', []),
+  //   ProductService('_imagePath', 'Dirami', '_address', 0, 2, '', '', [])
+  // ];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -175,27 +175,23 @@ class SearchBar extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Icon(Icons.location_city, size: 120),
-          const SizedBox(
-            height: 48,
-          ),
-          Text(
-            query,
-            style: TextStyle(
-                color: Colors.black, fontSize: 64, fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    );
+    final suggestions = query.isEmpty
+        ? []
+        : productServiceList.where((product) {
+            final productLower = product.name.toLowerCase();
+            // print('Product $productLower');
+            final queryLower = query.toLowerCase();
+
+            return productLower.startsWith(queryLower);
+          }).toList();
+
+    return buildSuggestionsSuccess(suggestions);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = query.isEmpty
-        ? recentProducts
+        ? []
         : productServiceList.where((product) {
             final productLower = product.name.toLowerCase();
             // print('Product $productLower');
@@ -208,22 +204,40 @@ class SearchBar extends SearchDelegate<String> {
   }
 
   Widget buildSuggestionsSuccess(List<dynamic> suggestions) {
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        final suggestion = suggestions[index];
+    return suggestions.length > 0
+        ? ListView.builder(
+            itemCount: suggestions.length,
+            itemBuilder: (context, index) {
+              final suggestion = suggestions[index];
 
-        return GestureDetector(
-          child: ProductCard(suggestion),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ProductServiceDetails(suggestion)));
-          },
-        );
-      },
-    );
+              return GestureDetector(
+                child: ProductCard(suggestion),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ProductServiceDetails(suggestion)));
+                },
+              );
+            },
+          )
+        : Center(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/img/search.png'),
+                  Text(
+                      'Procure pelo nome do estabelecimento, produto ou serviço',
+                      style: TextStyle(color: Colors.blueAccent, fontSize: 16),
+                      textAlign: TextAlign.center)
+                ],
+              ),
+            ),
+          );
   }
 }
 
