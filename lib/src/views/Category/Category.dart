@@ -37,7 +37,10 @@ class _CategoryPageState extends State<CategoryPage> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Text(
                 'Categorias',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    color: Colors.blueAccent),
               ),
             ),
             Expanded(
@@ -64,7 +67,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => StablichmentsPage(
-                                            categories[index].id)));
+                                            categories[index])));
                               },
                               splashColor: Colors.blueAccent,
                               child: Container(
@@ -75,11 +78,14 @@ class _CategoryPageState extends State<CategoryPage> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      categories[index].description,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
+                                    Expanded(
+                                      child: Text(
+                                        categories[index].description,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
