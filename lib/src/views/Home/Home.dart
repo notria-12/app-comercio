@@ -145,11 +145,6 @@ class SearchBar extends SearchDelegate<String> {
   final List<ProductService> productServiceList;
 
   SearchBar(this.productServiceList);
-  // final List<ProductService> recentProducts = [
-  //   ProductService('_imagePath', 'Americana', '_address', 0, 2, '', '', []),
-  //   ProductService('_imagePath', 'Med Cardio', '_address', 0, 2, '', '', []),
-  //   ProductService('_imagePath', 'Dirami', '_address', 0, 2, '', '', [])
-  // ];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -197,7 +192,7 @@ class SearchBar extends SearchDelegate<String> {
             // print('Product $productLower');
             final queryLower = query.toLowerCase();
 
-            return productLower.startsWith(queryLower);
+            return productLower.contains(queryLower);
           }).toList();
 
     return buildSuggestionsSuccess(suggestions);
@@ -239,6 +234,9 @@ class SearchBar extends SearchDelegate<String> {
             ),
           );
   }
+
+  @override
+  String get searchFieldLabel => 'Digite aqui';
 }
 
 class CategoryWidget extends StatelessWidget {

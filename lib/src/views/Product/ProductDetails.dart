@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
+import 'package:loja_virtual/src/widgets/expandable_fab.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductServiceDetails extends StatelessWidget {
@@ -19,8 +20,7 @@ class ProductServiceDetails extends StatelessWidget {
               onPressed: () {}, icon: Icon(Icons.favorite_border_outlined))
         ],
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      floatingActionButton: ExpandableFab(
         children: [
           FloatingActionButton(
             onPressed: () {
@@ -28,8 +28,11 @@ class ProductServiceDetails extends StatelessWidget {
             },
             child: Icon(Icons.map),
           ),
-          SizedBox(
-            width: 8,
+          FloatingActionButton(
+            onPressed: () {
+              fazerLigacao();
+            },
+            child: Icon(Icons.phone),
           ),
           FloatingActionButton(
               onPressed: () {
@@ -37,7 +40,27 @@ class ProductServiceDetails extends StatelessWidget {
               },
               child: FaIcon(FontAwesomeIcons.whatsapp)),
         ],
+        distance: 100,
       ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.end,
+      //   children: [
+      // FloatingActionButton(
+      //   onPressed: () {
+      //     abrirGoogleMaps();
+      //   },
+      //   child: Icon(Icons.map),
+      // ),
+      // SizedBox(
+      //   width: 8,
+      // ),
+      // FloatingActionButton(
+      //     onPressed: () {
+      //       abrirWhatsApp();
+      //     },
+      //     child: FaIcon(FontAwesomeIcons.whatsapp)),
+      //   ],
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +153,7 @@ class ProductServiceDetails extends StatelessWidget {
 
   abrirWhatsApp() async {
     String number =
-        '+55' + _productService.phoneNumber.replaceAll(RegExp(r'\D'), '');
+        '+55' + _productService.phoneNumber2.replaceAll(RegExp(r'\D'), '');
     if (number.isEmpty) {
       print('Sem numero');
     } else {
@@ -141,6 +164,17 @@ class ProductServiceDetails extends StatelessWidget {
       } else {
         throw 'Could not launch $whatsappUrl';
       }
+    }
+  }
+
+  fazerLigacao() async {
+    String number = _productService.phoneNumber.replaceAll(RegExp(r'\D'), '');
+    // number = number.substring(0, 2) + '9' + number.substring(2, number.length - 1);
+    var url = 'tel:$number';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 }

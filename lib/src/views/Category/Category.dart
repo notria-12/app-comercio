@@ -176,7 +176,7 @@ class SearchBar extends SearchDelegate<String> {
             // print('category $categoryLower');
             final queryLower = query.toLowerCase();
 
-            return categoryLower.startsWith(queryLower);
+            return categoryLower.contains(queryLower);
           }).toList();
 
     return buildSuggestionsSuccess(suggestions);
@@ -211,8 +211,7 @@ class SearchBar extends SearchDelegate<String> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset('assets/img/search.png'),
-                  Text(
-                      'Procure pelo nome do estabelecimento, produto ou serviço',
+                  Text('Procure pelo nome da categoria desejada',
                       style: TextStyle(color: Colors.blueAccent, fontSize: 16),
                       textAlign: TextAlign.center)
                 ],
@@ -220,4 +219,7 @@ class SearchBar extends SearchDelegate<String> {
             ),
           );
   }
+
+  @override
+  String get searchFieldLabel => 'Digite aqui';
 }
