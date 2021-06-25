@@ -113,13 +113,6 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 case ConnectionState.done:
-                  print('DONE: ${snapshot.hasData}');
-                  print('DONE LISTA: ${snapshot.data}');
-                  if (!snapshot.hasData)
-                    return Center(
-                      child: Text('Carregando...'),
-                    );
-
                   return ListView.builder(
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
@@ -153,9 +146,9 @@ class SearchBar extends SearchDelegate<String> {
 
   SearchBar(this.productServiceList);
   final List<ProductService> recentProducts = [
-    ProductService('_imagePath', 'Americana', '_address'),
-    ProductService('_imagePath', 'Med Cardio', '_address'),
-    ProductService('_imagePath', 'Dirami', '_address')
+    ProductService('_imagePath', 'Americana', '_address', 0, 2, '', '', []),
+    ProductService('_imagePath', 'Med Cardio', '_address', 0, 2, '', '', []),
+    ProductService('_imagePath', 'Dirami', '_address', 0, 2, '', '', [])
   ];
 
   @override

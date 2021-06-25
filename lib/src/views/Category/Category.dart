@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
+import 'package:loja_virtual/src/views/Product/Stablichments.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -25,8 +26,9 @@ class _CategoryPageState extends State<CategoryPage> {
         title: Text('Categorias'),
       ),
       body: Container(
-        height: 400,
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(8),
+        color: Colors.black12,
+        height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,14 +58,37 @@ class _CategoryPageState extends State<CategoryPage> {
                         return ListView.builder(
                           itemCount: categories.length,
                           itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(categories[index].description),
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => StablichmentsPage(
+                                            categories[index].id)));
+                              },
+                              splashColor: Colors.blueAccent,
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 2),
+                                color: Colors.white,
+                                padding: EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      categories[index].description,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Icon(Icons.arrow_forward_ios)
+                                  ],
+                                ),
+                              ),
                             );
                           },
                         );
                       }
-
-                      break;
                     default:
                       return Text('DEFAULT');
                   }
