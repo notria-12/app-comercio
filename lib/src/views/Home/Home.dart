@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
+import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/views/Category/Category.dart';
 import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
@@ -17,13 +19,17 @@ class _HomePageState extends State<HomePage> {
   // final fb = FirebaseDatabase.instance;
   ProductServiceController productServiceController =
       ProductServiceController();
+  CategoryController categoryController = CategoryController();
+  late Future<List<Category>> _futureCategories;
   late Future<List<ProductService>> _futureProducts;
-  var list;
+  var productsList;
+  var categoriesList;
 
   @override
   void initState() {
     super.initState();
     _futureProducts = productServiceController.getProductServiceList();
+    _futureCategories = categoryController.getCategoryList();
   }
 
   @override
@@ -36,7 +42,9 @@ class _HomePageState extends State<HomePage> {
           IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                showSearch(context: context, delegate: SearchBar(list));
+                showSearch(
+                    context: context,
+                    delegate: SearchBar(productsList, categoriesList));
               }),
           IconButton(onPressed: () => {}, icon: Icon(Icons.favorite_border))
         ],
@@ -101,8 +109,8 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-              child: FutureBuilder<List<ProductService>>(
-            future: _futureProducts,
+              child: FutureBuilder<List>(
+            future: Future.wait([_futureProducts, _futureCategories]),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
@@ -114,18 +122,22 @@ class _HomePageState extends State<HomePage> {
                   }
                 case ConnectionState.done:
                   if (snapshot.hasData) {
+                    productsList =
+                        snapshot.data != null ? snapshot.data![0] : [];
+                    categoriesList =
+                        snapshot.data != null ? snapshot.data![1] : [];
                     return ListView.builder(
-                      itemCount: snapshot.data?.length,
+                      itemCount:
+                          snapshot.data != null ? snapshot.data![0].length : 0,
                       itemBuilder: (context, index) {
-                        list = snapshot.data ?? [];
                         return GestureDetector(
-                          child: ProductCard(list[index]),
+                          child: ProductCard(productsList[index]),
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        ProductServiceDetails(list[index])));
+                                    builder: (context) => ProductServiceDetails(
+                                        productsList[index])));
                           },
                         );
                       },
@@ -149,8 +161,9 @@ class _HomePageState extends State<HomePage> {
 
 class SearchBar extends SearchDelegate<String> {
   final List<ProductService> productServiceList;
+  final List<Category> categories;
 
-  SearchBar(this.productServiceList);
+  SearchBar(this.productServiceList, this.categories);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -174,33 +187,46 @@ class SearchBar extends SearchDelegate<String> {
         icon: Icon(Icons.arrow_back), onPressed: () => close(context, ''));
   }
 
+  List<ProductService> getSuggestions() {
+    List<ProductService> products = [];
+
+    categories.forEach((category) {
+      final categoryLower = category.description.toLowerCase();
+      final queryLower = query.toLowerCase();
+
+      products = [
+        if (categoryLower.contains(queryLower))
+          ...productServiceList
+              .where((product) => product.catIds.contains(category.id))
+              .toList(),
+        ...products
+      ];
+    });
+
+    return query.isEmpty
+        ? []
+        : [
+            ...productServiceList.where((product) {
+              final productLower = product.name.toLowerCase();
+
+              final queryLower = query.toLowerCase();
+
+              return productLower.contains(queryLower);
+            }).toList(),
+            ...products
+          ];
+  }
+
   @override
   Widget buildResults(BuildContext context) {
-    final suggestions = query.isEmpty
-        ? []
-        : productServiceList.where((product) {
-            final productLower = product.name.toLowerCase();
-            // print('Product $productLower');
-            final queryLower = query.toLowerCase();
-
-            return productLower.startsWith(queryLower);
-          }).toList();
+    final suggestions = getSuggestions();
 
     return buildSuggestionsSuccess(suggestions);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = query.isEmpty
-        ? []
-        : productServiceList.where((product) {
-            final productLower = product.name.toLowerCase();
-            // print('Product $productLower');
-            final queryLower = query.toLowerCase();
-
-            return productLower.contains(queryLower);
-          }).toList();
-
+    final suggestions = getSuggestions();
     return buildSuggestionsSuccess(suggestions);
   }
 
