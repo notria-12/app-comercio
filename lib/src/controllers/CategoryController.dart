@@ -18,12 +18,13 @@ class CategoryController {
     });
   }
 
-  Future<List<Category>> getCategoryForId(String catId) async {
+  Future<List<Category>> getCategoryForId(List catId) async {
     List<Category> categories = [];
+    print('Categories $catId');
 
     return categoryRepository.getData().then((categoryList) {
       categoryList.forEach((k, v) {
-        if (v['cat_id'] == catId) {
+        if (catId.contains(v['cat_id'])) {
           categories.add(Category.fromMap(v));
         }
       });

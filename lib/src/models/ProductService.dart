@@ -63,15 +63,6 @@ class ProductService {
   @override
   String toString() => 'ProductService(_imagePath: $_imagePath, _name: $_name)';
 
-  // @override
-  // bool operator ==(Object other) {
-  //   if (identical(this, other)) return true;
-
-  //   return other is ProductService &&
-  //       other._imagePath == _imagePath &&
-  //       other._name == _name;
-  // }
-
   @override
   int get hashCode => _imagePath.hashCode ^ _name.hashCode;
 }

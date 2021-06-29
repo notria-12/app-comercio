@@ -113,23 +113,29 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 case ConnectionState.done:
-                  return ListView.builder(
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      list = snapshot.data ?? [];
-                      return GestureDetector(
-                        child: ProductCard(list[index]),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProductServiceDetails(list[index])));
-                        },
-                      );
-                    },
-                  );
-
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (context, index) {
+                        list = snapshot.data ?? [];
+                        return GestureDetector(
+                          child: ProductCard(list[index]),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProductServiceDetails(list[index])));
+                          },
+                        );
+                      },
+                    );
+                  } else {
+                    print(snapshot.error);
+                    return Center(
+                      child: Text('Aconteceu um erro'),
+                    );
+                  }
                 default:
                   return Text('Default');
               }
