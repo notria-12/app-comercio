@@ -39,13 +39,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
+          PopupMenuButton<int>(
               icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                    context: context,
-                    delegate: SearchBar(productsList, categoriesList));
-              }),
+              onSelected: (item) => onSelectedItem(context, item),
+              itemBuilder: (context) => [
+                    PopupMenuItem<int>(value: 0, child: Text('Por nome')),
+                    PopupMenuItem<int>(value: 1, child: Text('Por Categorias'))
+                  ]),
           IconButton(onPressed: () => {}, icon: Icon(Icons.favorite_border))
         ],
       ),
@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: [
           Container(
-            // height: 40,
             width: double.maxFinite,
             color: Colors.white,
             padding: EdgeInsets.symmetric(vertical: 6),
@@ -80,7 +79,6 @@ class _HomePageState extends State<HomePage> {
                             color: Colors.blueAccent,
                             fontSize: 16),
                         textAlign: TextAlign.center,
-                        // style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -93,7 +91,6 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Container(
                       padding: EdgeInsets.all(10),
-                      // color: Colors.black12,
                       child: Text(
                         'Filtros',
                         style: TextStyle(
@@ -157,13 +154,29 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  onSelectedItem(BuildContext context, int item) {
+    switch (item) {
+      case 0:
+        showSearch(
+            context: context,
+            delegate: SearchBar(productsList, categoriesList, true));
+        break;
+      case 1:
+        showSearch(
+            context: context,
+            delegate: SearchBar(productsList, categoriesList, false));
+        break;
+    }
+  }
 }
 
 class SearchBar extends SearchDelegate<String> {
   final List<ProductService> productServiceList;
   final List<Category> categories;
+  final bool searchByname;
 
-  SearchBar(this.productServiceList, this.categories);
+  SearchBar(this.productServiceList, this.categories, this.searchByname);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -205,16 +218,15 @@ class SearchBar extends SearchDelegate<String> {
 
     return query.isEmpty
         ? []
-        : [
-            ...productServiceList.where((product) {
-              final productLower = product.name.toLowerCase();
+        : searchByname
+            ? productServiceList.where((product) {
+                final productLower = product.name.toLowerCase();
 
-              final queryLower = query.toLowerCase();
+                final queryLower = query.toLowerCase();
 
-              return productLower.contains(queryLower);
-            }).toList(),
-            ...products
-          ];
+                return productLower.contains(queryLower);
+              }).toList()
+            : products;
   }
 
   @override
@@ -269,13 +281,4 @@ class SearchBar extends SearchDelegate<String> {
 
   @override
   String get searchFieldLabel => 'Digite aqui';
-}
-
-class CategoryWidget extends StatelessWidget {
-  const CategoryWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
