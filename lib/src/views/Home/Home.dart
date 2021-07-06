@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   late Future<List<ProductService>> _futureProducts;
   var productsList;
   var categoriesList;
+  bool serachByname = true;
 
   @override
   void initState() {
@@ -34,20 +35,63 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // final isPortrait =
-    //     MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       appBar: AppBar(
         actions: [
-          PopupMenuButton<int>(
-              icon: Icon(Icons.search),
-              onSelected: (item) => onSelectedItem(context, item),
-              itemBuilder: (context) => [
-                    PopupMenuItem<int>(value: 0, child: Text('Por nome')),
-                    PopupMenuItem<int>(value: 1, child: Text('Por Categorias'))
-                  ]),
           IconButton(onPressed: () => {}, icon: Icon(Icons.favorite_border))
         ],
+        bottom: PreferredSize(
+          child: Container(
+              padding: EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    child: ButtonSearch('Descrição', serachByname),
+                    onTap: () => onSelectedItem(0),
+                  ),
+                  GestureDetector(
+                      child: ButtonSearch('Categoria', !serachByname),
+                      onTap: () => onSelectedItem(1)),
+                ],
+              )),
+          preferredSize: Size.fromHeight(30),
+        ),
+        title: GestureDetector(
+          onTap: () {
+            showSearch(
+                context: context,
+                delegate:
+                    SearchBar(productsList, categoriesList, serachByname));
+          },
+          child: Container(
+            padding: EdgeInsets.all(8),
+            height: 35,
+            width: MediaQuery.of(context).size.width * 0.8,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.search,
+                  color: Colors.black26,
+                  size: 20,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Text(
+                    'Busque aqui...',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black26, fontSize: 15),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
       drawer: Drawer(
         child: Container(),
@@ -155,19 +199,64 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  onSelectedItem(BuildContext context, int item) {
+  onSelectedItem(int item) {
     switch (item) {
       case 0:
-        showSearch(
-            context: context,
-            delegate: SearchBar(productsList, categoriesList, true));
+        serachByname = true;
+        setState(() {});
+
         break;
       case 1:
-        showSearch(
-            context: context,
-            delegate: SearchBar(productsList, categoriesList, false));
+        serachByname = false;
+        setState(() {});
         break;
     }
+  }
+}
+
+class ButtonSearch extends StatelessWidget {
+  final String label;
+  final bool searchByName;
+  const ButtonSearch(
+    this.label,
+    this.searchByName, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return searchByName
+        ? Container(
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: Colors.white),
+            height: 25,
+            width: 80,
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                    color: Colors.blueAccent, fontWeight: FontWeight.bold),
+              ),
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.blue),
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white38),
+            height: 25,
+            width: 80,
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          );
   }
 }
 
