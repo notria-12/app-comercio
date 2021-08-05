@@ -1,4 +1,3 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
@@ -6,6 +5,7 @@ import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/views/Category/Category.dart';
 import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
+import 'package:loja_virtual/src/widgets/drawer_widget.dart';
 import 'package:loja_virtual/src/widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -47,12 +47,44 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    child: ButtonSearch('Descrição', serachByname),
-                    onTap: () => onSelectedItem(0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white38),
+                      height: 25,
+                      width: 80,
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      child: Center(
+                        child: Text(
+                          "Descrição",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // onTap: () => onSelectedItem(0),
                   ),
                   GestureDetector(
-                      child: ButtonSearch('Categoria', !serachByname),
-                      onTap: () => onSelectedItem(1)),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
+                        height: 25,
+                        width: 80,
+                        child: Center(
+                          child: Text(
+                            "Categoria",
+                            style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => CategoryPage()))),
                 ],
               )),
           preferredSize: Size.fromHeight(30),
@@ -94,61 +126,61 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: Drawer(
-        child: Container(),
+        child: DrawerWidget(),
       ),
       body: Column(
         children: [
-          Container(
-            width: double.maxFinite,
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CategoryPage()));
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        'Categorias',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.blueAccent,
-                            fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: InkWell(
-                    onTap: () {
-                      print('Sensacional');
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        'Filtros',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.blueAccent,
-                            fontSize: 16),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Container(
+          //   width: double.maxFinite,
+          //   color: Colors.white,
+          //   padding: EdgeInsets.symmetric(vertical: 6),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Expanded(
+          //         flex: 1,
+          //         child: InkWell(
+          //           onTap: () {
+          //             Navigator.push(
+          //                 context,
+          //                 MaterialPageRoute(
+          //                     builder: (context) => CategoryPage()));
+          //           },
+          //           child: Container(
+          //             padding: EdgeInsets.all(10),
+          //             child: Text(
+          //               'Categorias',
+          //               style: TextStyle(
+          //                   fontWeight: FontWeight.w600,
+          //                   color: Colors.blueAccent,
+          //                   fontSize: 16),
+          //               textAlign: TextAlign.center,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //       Expanded(
+          //         flex: 1,
+          //         child: InkWell(
+          //           onTap: () {
+          //             print('Sensacional');
+          //           },
+          //           child: Container(
+          //             padding: EdgeInsets.all(10),
+          //             child: Text(
+          //               'Filtros',
+          //               style: TextStyle(
+          //                   fontWeight: FontWeight.w600,
+          //                   color: Colors.blueAccent,
+          //                   fontSize: 16),
+          //               textAlign: TextAlign.center,
+          //             ),
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
           Expanded(
               child: FutureBuilder<List>(
             future: Future.wait([_futureProducts, _futureCategories]),
