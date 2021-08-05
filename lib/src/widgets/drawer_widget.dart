@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/Login/login_page.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -43,7 +44,8 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    print('clicou');
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => LoginPage()));
                   },
                   child: Text(
                     "Clique aqui para logar",
