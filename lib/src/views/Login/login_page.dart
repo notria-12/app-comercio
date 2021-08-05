@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/HomeAuth/home_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -90,22 +91,29 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: double.maxFinite,
-                          margin: EdgeInsets.only(top: 30),
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Center(
-                              child: Text(
-                            'ENTRAR',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Roboto',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          )),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (_) => HomeAuthPage()));
+                          },
+                          child: Container(
+                            width: double.maxFinite,
+                            margin: EdgeInsets.only(top: 30),
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                                child: Text(
+                              'ENTRAR',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
+                            )),
+                          ),
                         )
                       ],
                     ),
