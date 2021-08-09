@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/views/HomeAuth/home_auth.dart';
+import 'package:loja_virtual/src/views/SignUp/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -135,7 +136,10 @@ class _LoginPageState extends State<LoginPage> {
                                   fontWeight: FontWeight.w500),
                             ),
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => SignUpPage()));
+                              },
                               child: Text(
                                 'Cadastrar',
                                 style: TextStyle(
