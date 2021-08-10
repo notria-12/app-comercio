@@ -20,8 +20,8 @@ class AuthController {
         navigatorKey.currentState!
             .push(MaterialPageRoute(builder: (_) => HomePage()));
       } else if (AuthController.instance.state == AuthState.authenticated) {
-        navigatorKey.currentState!
-            .push(MaterialPageRoute(builder: (_) => HomeAuthPage()));
+        // navigatorKey.currentState!
+        // .push(MaterialPageRoute(builder: (_) => HomeAuthPage()));
       }
     });
   }

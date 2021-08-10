@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/src/views/Login/login_page.dart';
+// import 'package:loja_virtual/src/views/Login/login_page.dart';
 
 class DrawerAuthWidget extends StatelessWidget {
-  const DrawerAuthWidget({Key? key}) : super(key: key);
+  const DrawerAuthWidget(
+      {Key? key,
+      required this.userEmail,
+      required this.establishmentName,
+      required this.urlImage})
+      : super(key: key);
+  final String userEmail;
+  final String establishmentName;
+  final urlImage;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +32,20 @@ class DrawerAuthWidget extends StatelessWidget {
                 Container(
                   height: 60,
                   width: 60,
+                  padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.white),
-                  child: Image.asset('assets/img/stablishment_logo.png'),
+                  child: Container(
+                    child: Center(child: Image.network(urlImage)),
+                    height: 40,
+                    width: 40,
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "Nome estabelecimento",
+                  establishmentName,
                   style: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Roboto',
@@ -43,7 +56,7 @@ class DrawerAuthWidget extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "email",
+                  userEmail,
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.normal,
@@ -59,7 +72,7 @@ class DrawerAuthWidget extends StatelessWidget {
           Icon(Icons.home, color: Color.fromRGBO(151, 151, 151, 1)),
           'Início',
           () {
-            print('clicou');
+            Navigator.of(context).pop();
           },
         ),
         ItemDrawerWidget(
@@ -73,7 +86,7 @@ class DrawerAuthWidget extends StatelessWidget {
           Icon(Icons.logout, color: Color.fromRGBO(151, 151, 151, 1)),
           'Sair',
           () {
-            print('clicou');
+            Navigator.of(context).pop();
           },
         ),
       ],

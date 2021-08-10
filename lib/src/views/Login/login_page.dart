@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/controllers/login_controller.dart';
+import 'package:loja_virtual/src/models/user_model.dart';
 import 'package:loja_virtual/src/views/HomeAuth/home_auth.dart';
 import 'package:loja_virtual/src/views/SignUp/signup_page.dart';
 
@@ -10,6 +12,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  // TextEditingController _textControllerEmail = TextEditingController();
+  bool _validate = false;
+  String? email = "", password = "";
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,19 +63,34 @@ class _LoginPageState extends State<LoginPage> {
                     height: 50,
                   ),
                   Form(
+                    key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          enabled: !loading,
                           decoration: InputDecoration(
-                              hintText: 'E-mail',
-                              labelText: 'E-mail',
-                              suffixIcon: Icon(Icons.email)),
+                            hintText: 'E-mail',
+                            labelText: 'E-mail',
+                            suffixIcon: Icon(Icons.email),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: _emailValidate,
+                          onSaved: (String? val) {
+                            email = val;
+                          },
                         ),
                         TextFormField(
+                          enabled: !loading,
                           decoration: InputDecoration(
                               hintText: 'Senha',
                               labelText: 'Senha',
                               suffixIcon: Icon(Icons.lock)),
+                          keyboardType: TextInputType.text,
+                          validator: _passValidate,
+                          obscureText: true,
+                          onSaved: (String? val) {
+                            password = val;
+                          },
                         ),
                         SizedBox(
                           height: 15,
@@ -92,30 +115,39 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (_) => HomeAuthPage()));
-                          },
-                          child: Container(
-                            width: double.maxFinite,
-                            margin: EdgeInsets.only(top: 30),
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Center(
-                                child: Text(
-                              'ENTRAR',
-                              style: TextStyle(
+                        loading
+                            ? Container(
+                                width: double.maxFinite,
+                                margin: EdgeInsets.only(top: 30),
+                                padding: EdgeInsets.symmetric(vertical: 16.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Center(
+                                    child: CircularProgressIndicator(
                                   color: Colors.white,
-                                  fontFamily: 'Roboto',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            )),
-                          ),
-                        )
+                                )),
+                              )
+                            : InkWell(
+                                onTap: _sendForm,
+                                child: Container(
+                                  width: double.maxFinite,
+                                  margin: EdgeInsets.only(top: 30),
+                                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                                  decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Center(
+                                      child: Text(
+                                    'ENTRAR',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Roboto',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                                ),
+                              )
                       ],
                     ),
                   ),
@@ -159,5 +191,54 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  String? _emailValidate(String? value) {
+    var regExp = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
+    if (value!.length == 0) {
+      return "Informe o Email";
+    } else if (!regExp.hasMatch(value)) {
+      return "Email inválido";
+    } else {
+      return null;
+    }
+  }
+
+  String? _passValidate(String? value) {
+    if (value!.length < 6) {
+      return "Senha mínima de 6 dgitos";
+    } else {
+      return null;
+    }
+  }
+
+  _sendForm() async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      LoginController loginController = LoginController();
+      loading = true;
+      setState(() {});
+      try {
+        UserModel user =
+            await loginController.login(email: email!, password: password!);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (_) => HomeAuthPage(
+                  userModel: user,
+                )));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Erro ao logar, verifique email e senha!')));
+      }
+      loading = false;
+      setState(() {});
+    } else {
+      // erro de validação
+      setState(() {
+        _validate = true;
+      });
+    }
   }
 }
