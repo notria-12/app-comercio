@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/models/user_model.dart';
 import 'package:loja_virtual/src/shared/widgets/drawer_auth_widget.dart';
+import 'package:loja_virtual/src/views/ProductAuth/product_details_auth_page.dart';
 
 class HomeAuthPage extends StatelessWidget {
   const HomeAuthPage({Key? key, required this.userModel}) : super(key: key);
@@ -82,8 +83,8 @@ class HomeAuthPage extends StatelessWidget {
                           Container(
                             height: 244,
                             width: 244,
-                            child: Image.asset(
-                              'assets/img/eletro-fase.jpeg',
+                            child: Image.network(
+                              userModel.productService!.imagePath,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -93,7 +94,7 @@ class HomeAuthPage extends StatelessWidget {
                           Container(
                             width: 244,
                             child: Text(
-                              "Eletro Fase",
+                              userModel.productService!.name,
                               style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Roboto',
@@ -107,7 +108,7 @@ class HomeAuthPage extends StatelessWidget {
                           Container(
                             width: 244,
                             child: Text(
-                              "Alamenda Demétrioo Cavlak, 2094 - Centro, Lucélia - SP, 17780-00, Brasil",
+                              userModel.productService!.address,
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'Roboto',
@@ -125,7 +126,11 @@ class HomeAuthPage extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) =>
+                    ProductServiceDetailsAuth(userModel.productService!)));
+          },
           child: Icon(Icons.edit),
         ),
       ),

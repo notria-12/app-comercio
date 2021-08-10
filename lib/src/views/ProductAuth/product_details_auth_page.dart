@@ -4,12 +4,15 @@ import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/shared/widgets/expandable_fab.dart';
+import 'package:loja_virtual/src/views/EditProduct/edit_product_page.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductServiceDetailsAuth extends StatefulWidget {
   final ProductService _productService;
-  const ProductServiceDetailsAuth(this._productService, {Key? key})
+  final String? productId;
+  const ProductServiceDetailsAuth(this._productService,
+      {Key? key, this.productId})
       : super(key: key);
 
   @override
@@ -36,30 +39,14 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
           centerTitle: true,
           actions: [
             IconButton(
-                onPressed: () {}, icon: Icon(Icons.favorite_border_outlined))
-          ],
-        ),
-        floatingActionButton: ExpandableFab(
-          children: [
-            FloatingActionButton(
-              onPressed: () {
-                abrirGoogleMaps();
-              },
-              child: Icon(Icons.map),
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                fazerLigacao();
-              },
-              child: Icon(Icons.phone),
-            ),
-            FloatingActionButton(
                 onPressed: () {
-                  abrirWhatsApp();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => EditProductPage(
+                            productService: widget._productService,
+                          )));
                 },
-                child: FaIcon(FontAwesomeIcons.whatsapp)),
+                icon: Icon(Icons.edit))
           ],
-          distance: 100,
         ),
         body: FutureBuilder<List<Category>>(
           future: _categories,
@@ -128,7 +115,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vulputate velit at dolor mattis, non consequat est elementum. Cras consequat semper gravida',
+                          widget._productService.description,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400),

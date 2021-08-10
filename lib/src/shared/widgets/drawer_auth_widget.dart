@@ -85,8 +85,31 @@ class DrawerAuthWidget extends StatelessWidget {
         ItemDrawerWidget(
           Icon(Icons.logout, color: Color.fromRGBO(151, 151, 151, 1)),
           'Sair',
-          () {
-            Navigator.of(context).pop();
+          () async {
+            return await showDialog(
+                  context: context,
+                  builder: (context) => new AlertDialog(
+                    title: new Text('Tem certeza?'),
+                    content:
+                        new Text('Realmente deseja sair da área de acesso?'),
+                    actions: <Widget>[
+                      new GestureDetector(
+                        onTap: () => Navigator.of(context).pop(false),
+                        child: Text("NÃO"),
+                      ),
+                      SizedBox(height: 16),
+                      new GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(true);
+                          Navigator.of(context).pop(true);
+                        },
+                        child: Text("SIM"),
+                      ),
+                    ],
+                  ),
+                ) ??
+                false;
           },
         ),
       ],

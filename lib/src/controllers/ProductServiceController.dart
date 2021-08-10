@@ -33,4 +33,9 @@ class ProductServiceController {
       print('ERRO');
     });
   }
+
+  Future updateStabblishment(
+      String estId, ProductService productService) async {
+    await productServiceData.updateData(estId, productService);
+  }
 }

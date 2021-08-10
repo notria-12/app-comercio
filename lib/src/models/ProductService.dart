@@ -10,12 +10,21 @@ class ProductService {
   String _phoneNumber;
   String _phoneNumber2;
   List<dynamic> _catIds;
+  String _description;
 
   // ProductService(this._imagePath, this._name, this._address, this._latitude,
   //     this._longitude, this._phoneNumber, this._phoneNumber2);
 
-  ProductService(this._imagePath, this._name, this._address, this._latitude,
-      this._longitude, this._phoneNumber, this._phoneNumber2, this._catIds);
+  ProductService(
+      this._imagePath,
+      this._name,
+      this._address,
+      this._latitude,
+      this._longitude,
+      this._phoneNumber,
+      this._phoneNumber2,
+      this._catIds,
+      this._description);
 
   String get name => _name;
   String get imagePath => _imagePath;
@@ -25,6 +34,7 @@ class ProductService {
   double get longitude => _longitude;
   String get phoneNumber => _phoneNumber;
   String get phoneNumber2 => _phoneNumber2;
+  String get description => _description;
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,7 +45,8 @@ class ProductService {
       'est_longitude': _longitude,
       'est_catid': _catIds,
       'est_telefone01': _phoneNumber,
-      'est_telefone02': _phoneNumber2
+      'est_telefone02': _phoneNumber2,
+      'description': _description
     };
   }
 
@@ -52,6 +63,7 @@ class ProductService {
       map['est_catid'].map((cat) {
         return cat.toString();
       }).toList(),
+      map['description'] ?? '',
     );
   }
 
@@ -65,4 +77,28 @@ class ProductService {
 
   @override
   int get hashCode => _imagePath.hashCode ^ _name.hashCode;
+
+  ProductService copyWith({
+    String? imagePath,
+    String? name,
+    String? address,
+    double? latitude,
+    double? longitude,
+    String? phoneNumber,
+    String? phoneNumber2,
+    List<dynamic>? catIds,
+    String? description,
+  }) {
+    return ProductService(
+      _imagePath ?? this._imagePath,
+      _name ?? this._name,
+      _address ?? this._address,
+      _latitude ?? this._latitude,
+      _longitude ?? this._longitude,
+      _phoneNumber ?? this._phoneNumber,
+      _phoneNumber2 ?? this._phoneNumber2,
+      _catIds ?? this._catIds,
+      _description ?? this._description,
+    );
+  }
 }
