@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
-import 'package:loja_virtual/src/shared/widgets/expandable_fab.dart';
 import 'package:loja_virtual/src/views/EditProduct/edit_product_page.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductServiceDetailsAuth extends StatefulWidget {
@@ -22,6 +19,7 @@ class ProductServiceDetailsAuth extends StatefulWidget {
 class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
   final categoryController = CategoryController();
   late Future<List<Category>> _categories;
+  late ProductService auxProduct;
 
   @override
   void initState() {
@@ -29,6 +27,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
 
     _categories =
         categoryController.getCategoryForId(widget._productService.catIds);
+    auxProduct = widget._productService;
   }
 
   @override
@@ -37,13 +36,32 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
         appBar: AppBar(
           title: Text('Detalhes'),
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+            ),
+            onPressed: () {
+              Navigator.pop(context, auxProduct);
+            },
+          ),
           actions: [
             IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => EditProductPage(
-                            productService: widget._productService,
-                          )));
+                onPressed: () async {
+                  final result =
+                      await Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => EditProductPage(
+                                productService: auxProduct,
+                                productId: widget.productId,
+                              )));
+
+                  if (result != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Estabelecimento atualizado')));
+
+                    setState(() {
+                      auxProduct = result;
+                    });
+                  }
                 },
                 icon: Icon(Icons.edit))
           ],
@@ -57,7 +75,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                 return Center(child: CircularProgressIndicator());
               case ConnectionState.done:
                 var list = snapshot.data ?? [];
-                print(list);
+                // print(list);
                 String cats = '';
                 for (var i = 0; i < list.length; i++) {
                   if (i < list.length - 1) {
@@ -74,13 +92,12 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                           height: MediaQuery.of(context).size.height * 0.4,
                           color: Colors.black12,
                           child: Center(
-                            child:
-                                Image.network(widget._productService.imagePath),
+                            child: Image.network(auxProduct.imagePath),
                           )),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          widget._productService.name,
+                          auxProduct.name,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w600),
@@ -89,7 +106,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          widget._productService.address,
+                          auxProduct.address,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400),
@@ -115,7 +132,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          widget._productService.description,
+                          auxProduct.description,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400),

@@ -46,7 +46,7 @@ class ProductService {
       'est_catid': _catIds,
       'est_telefone01': _phoneNumber,
       'est_telefone02': _phoneNumber2,
-      'description': _description
+      'descricao': _description
     };
   }
 
@@ -63,7 +63,7 @@ class ProductService {
       map['est_catid'].map((cat) {
         return cat.toString();
       }).toList(),
-      map['description'] ?? '',
+      map['descricao'] ?? '',
     );
   }
 
@@ -90,15 +90,15 @@ class ProductService {
     String? description,
   }) {
     return ProductService(
-      _imagePath ?? this._imagePath,
-      _name ?? this._name,
-      _address ?? this._address,
-      _latitude ?? this._latitude,
-      _longitude ?? this._longitude,
-      _phoneNumber ?? this._phoneNumber,
-      _phoneNumber2 ?? this._phoneNumber2,
-      _catIds ?? this._catIds,
-      _description ?? this._description,
+      imagePath ?? this._imagePath,
+      name ?? this._name,
+      address ?? this._address,
+      latitude ?? this._latitude,
+      longitude ?? this._longitude,
+      phoneNumber ?? this._phoneNumber,
+      phoneNumber2 ?? this._phoneNumber2,
+      catIds ?? this._catIds,
+      description ?? this._description,
     );
   }
 }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/models/user_model.dart';
 import 'package:loja_virtual/src/shared/widgets/drawer_auth_widget.dart';
 import 'package:loja_virtual/src/views/ProductAuth/product_details_auth_page.dart';
 
 class HomeAuthPage extends StatelessWidget {
-  const HomeAuthPage({Key? key, required this.userModel}) : super(key: key);
+  HomeAuthPage({Key? key, required this.userModel}) : super(key: key);
   final UserModel userModel;
+  late ProductService auxProductService;
 
   @override
   Widget build(BuildContext context) {
+    auxProductService = userModel.productService!;
     return WillPopScope(
       onWillPop: () async {
         return await showDialog(
@@ -94,7 +97,7 @@ class HomeAuthPage extends StatelessWidget {
                           Container(
                             width: 244,
                             child: Text(
-                              userModel.productService!.name,
+                              auxProductService.name,
                               style: TextStyle(
                                   fontSize: 20,
                                   fontFamily: 'Roboto',
@@ -108,7 +111,7 @@ class HomeAuthPage extends StatelessWidget {
                           Container(
                             width: 244,
                             child: Text(
-                              userModel.productService!.address,
+                              auxProductService.address,
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'Roboto',
@@ -126,10 +129,16 @@ class HomeAuthPage extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) =>
-                    ProductServiceDetailsAuth(userModel.productService!)));
+          onPressed: () async {
+            final result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ProductServiceDetailsAuth(
+                      auxProductService,
+                      productId: userModel.establishmentKey,
+                    )));
+
+            if (result != null) {
+              auxProductService = result;
+            }
           },
           child: Icon(Icons.edit),
         ),

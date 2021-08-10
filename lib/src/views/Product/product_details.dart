@@ -147,7 +147,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vulputate velit at dolor mattis, non consequat est elementum. Cras consequat semper gravida',
+                          widget._productService.description,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w400),
