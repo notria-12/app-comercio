@@ -11,7 +11,7 @@ enum AuthState { empty, loading, authenticated, unauthenticated, error }
 class AuthController {
   static AuthController? _instance;
   final navigatorKey = GlobalKey<NavigatorState>();
-  final _stateNotifier = ValueNotifier<AuthState>(AuthState.unauthenticated);
+  final _stateNotifier = ValueNotifier<AuthState>(AuthState.empty);
   SharedPreferences? _prefs;
 
   AuthController() {
@@ -47,9 +47,13 @@ class AuthController {
 
     _prefs = await SharedPreferences.getInstance();
 
-    String? userString = _prefs!.getString('user');
-    if (userString != null) {
-      var userMap = json.decode(userString);
+    String userString = _prefs!.getString('user') ?? "";
+    print("userString $userString");
+    if (!userString.isEmpty) {
+      // var userMap = json.decode(userString);
+      var userAux = FirebaseAuth.instance.currentUser;
+      print(userAux!.email);
+      _state = AuthState.authenticated;
     } else {
       _state = AuthState.unauthenticated;
     }

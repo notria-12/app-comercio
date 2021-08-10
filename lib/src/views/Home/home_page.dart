@@ -5,8 +5,8 @@ import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/shared/widgets/drawer_widget.dart';
 import 'package:loja_virtual/src/shared/widgets/product_card.dart';
-import 'package:loja_virtual/src/views/Category/Category.dart';
-import 'package:loja_virtual/src/views/Product/ProductDetails.dart';
+import 'package:loja_virtual/src/views/Category/category_page.dart';
+import 'package:loja_virtual/src/views/Product/product_details.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
