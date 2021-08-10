@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/shared/widgets/drawer_auth_widget.dart';
 
 class HomeAuthPage extends StatelessWidget {
   const HomeAuthPage({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class HomeAuthPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Home'),
       ),
-      drawer: Drawer(),
+      drawer: DrawerAuthWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

@@ -7,16 +7,16 @@ import 'package:loja_virtual/src/shared/widgets/expandable_fab.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-class ProductServiceDetails extends StatefulWidget {
+class ProductServiceDetailsAuth extends StatefulWidget {
   final ProductService _productService;
-  const ProductServiceDetails(this._productService, {Key? key})
+  const ProductServiceDetailsAuth(this._productService, {Key? key})
       : super(key: key);
 
   @override
   _ProductServiceDetailsState createState() => _ProductServiceDetailsState();
 }
 
-class _ProductServiceDetailsState extends State<ProductServiceDetails> {
+class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
   final categoryController = CategoryController();
   late Future<List<Category>> _categories;
 
@@ -61,25 +61,6 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
           ],
           distance: 100,
         ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        // FloatingActionButton(
-        //   onPressed: () {
-        //     abrirGoogleMaps();
-        //   },
-        //   child: Icon(Icons.map),
-        // ),
-        // SizedBox(
-        //   width: 8,
-        // ),
-        // FloatingActionButton(
-        //     onPressed: () {
-        //       abrirWhatsApp();
-        //     },
-        //     child: FaIcon(FontAwesomeIcons.whatsapp)),
-        //   ],
-        // ),
         body: FutureBuilder<List<Category>>(
           future: _categories,
           builder: (context, snapshot) {
