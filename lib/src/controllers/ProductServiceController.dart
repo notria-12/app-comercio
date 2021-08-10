@@ -1,5 +1,5 @@
 import 'package:loja_virtual/src/models/ProductService.dart';
-import 'package:loja_virtual/src/repository/ProductServiceRepository.dart';
+import 'package:loja_virtual/src/repository/product_service_repository.dart';
 
 class ProductServiceController {
   final productServiceData = ProductServiceRepository();

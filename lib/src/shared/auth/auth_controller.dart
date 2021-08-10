@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/src/views/Home/Home.dart';
+import 'package:loja_virtual/src/views/Home/home_page.dart';
 import 'package:loja_virtual/src/views/HomeAuth/home_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthState { empty, loading, authenticated, unauthenticated, error }
 
@@ -9,6 +12,7 @@ class AuthController {
   static AuthController? _instance;
   final navigatorKey = GlobalKey<NavigatorState>();
   final _stateNotifier = ValueNotifier<AuthState>(AuthState.unauthenticated);
+  SharedPreferences? _prefs;
 
   AuthController() {
     listen(() {
@@ -40,8 +44,16 @@ class AuthController {
 
   Future<void> init() async {
     _state = AuthState.loading;
-    await Future.delayed(Duration(seconds: 2));
-    _state = AuthState.unauthenticated;
+
+    _prefs = await SharedPreferences.getInstance();
+
+    String? userString = _prefs!.getString('user');
+    if (userString != null) {
+      var userMap = json.decode(userString);
+    } else {
+      _state = AuthState.unauthenticated;
+    }
+
     //Verificar no shared preferences se existe um usuário logado
     //IF(true) buscar o dado, e insere no _user
     //IF(false) insere _user como nulo
@@ -49,11 +61,13 @@ class AuthController {
 
   Future<void> _setUser(User? user) async {
     this.user = user;
+    _prefs = await SharedPreferences.getInstance();
     if (this.user == null) {
-      //DELETAR do shared preferences
+      _prefs!.remove("user");
     } else {
       _state = AuthState.authenticated;
-      //SALVAR no shared preferences
+      var userData = {"email": user!.email, "uid": user.uid};
+      _prefs!.setString("user", json.encode(userData));
     }
   }
 

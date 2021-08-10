@@ -1,5 +1,5 @@
 import 'package:loja_virtual/src/models/Category.dart';
-import 'package:loja_virtual/src/repository/CategoryRepository.dart';
+import 'package:loja_virtual/src/repository/category_repository.dart';
 
 class CategoryController {
   final categoryRepository = CategoryRepository();

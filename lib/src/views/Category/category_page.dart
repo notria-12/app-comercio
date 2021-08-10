@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
-import 'package:loja_virtual/src/views/Product/Stablichments.dart';
+import 'package:loja_virtual/src/views/Product/stablishments.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
