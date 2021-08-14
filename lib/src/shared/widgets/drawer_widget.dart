@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/Category/category_page.dart';
 import 'package:loja_virtual/src/views/Login/login_page.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -65,30 +66,31 @@ class DrawerWidget extends StatelessWidget {
           Icon(Icons.home, color: Color.fromRGBO(151, 151, 151, 1)),
           'Início',
           () {
-            print('clicou');
+            Navigator.of(context).pop();
           },
         ),
-        ItemDrawerWidget(
-          Icon(Icons.search, color: Color.fromRGBO(151, 151, 151, 1)),
-          'Buscar',
-          () {
-            print('clicou');
-          },
-        ),
+        // ItemDrawerWidget(
+        //   Icon(Icons.search, color: Color.fromRGBO(151, 151, 151, 1)),
+        //   'Buscar',
+        //   () {
+        //     print('clicou');
+        //   },
+        // ),
         ItemDrawerWidget(
           Icon(Icons.category, color: Color.fromRGBO(151, 151, 151, 1)),
           'Categorias',
           () {
-            print('clicou');
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => CategoryPage()));
           },
         ),
-        ItemDrawerWidget(
-          Icon(Icons.favorite, color: Color.fromRGBO(151, 151, 151, 1)),
-          'Meus favoritos',
-          () {
-            print('clicou');
-          },
-        )
+        // ItemDrawerWidget(
+        //   Icon(Icons.favorite, color: Color.fromRGBO(151, 151, 151, 1)),
+        //   'Meus favoritos',
+        //   () {
+        //     print('clicou');
+        //   },
+        // )
       ],
     ));
   }
