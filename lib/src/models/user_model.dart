@@ -37,4 +37,16 @@ class UserModel {
   @override
   String toString() =>
       'UserModel(email: $email, establishmentKey: $establishmentKey, productService: $productService)';
+
+  UserModel copyWith({
+    String? email,
+    String? establishmentKey,
+    ProductService? productService,
+  }) {
+    return UserModel(
+      email: email ?? this.email,
+      establishmentKey: establishmentKey ?? this.establishmentKey,
+      productService: productService ?? this.productService,
+    );
+  }
 }

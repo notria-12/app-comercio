@@ -32,146 +32,153 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Detalhes'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
+    return WillPopScope(
+      onWillPop: () {
+        setState(() {});
+        return Future.delayed(Duration(milliseconds: 100))
+            .then((value) => true);
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('Detalhes'),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () {
+                Navigator.pop(context, auxProduct);
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context, auxProduct);
-            },
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    final result =
+                        await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => EditProductPage(
+                                  productService: auxProduct,
+                                  productId: widget.productId,
+                                )));
+
+                    if (result != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Estabelecimento atualizado')));
+
+                      setState(() {
+                        auxProduct = result;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.edit))
+            ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  final result =
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => EditProductPage(
-                                productService: auxProduct,
-                                productId: widget.productId,
-                              )));
-
-                  if (result != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Estabelecimento atualizado')));
-
-                    setState(() {
-                      auxProduct = result;
-                    });
+          body: FutureBuilder<List<Category>>(
+            future: _categories,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                  return Center(child: CircularProgressIndicator());
+                case ConnectionState.done:
+                  var list = snapshot.data ?? [];
+                  // print(list);
+                  String cats = '';
+                  for (var i = 0; i < list.length; i++) {
+                    if (i < list.length - 1) {
+                      cats += list[i].description + ', ';
+                    } else {
+                      cats += list[i].description;
+                    }
                   }
-                },
-                icon: Icon(Icons.edit))
-          ],
-        ),
-        body: FutureBuilder<List<Category>>(
-          future: _categories,
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-              case ConnectionState.none:
-                return Center(child: CircularProgressIndicator());
-              case ConnectionState.done:
-                var list = snapshot.data ?? [];
-                // print(list);
-                String cats = '';
-                for (var i = 0; i < list.length; i++) {
-                  if (i < list.length - 1) {
-                    cats += list[i].description + ', ';
-                  } else {
-                    cats += list[i].description;
-                  }
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          color: Colors.black12,
-                          child: Center(
-                            child: Image.network(auxProduct.imagePath),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          auxProduct.name,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
+                  return SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            color: Colors.black12,
+                            child: Center(
+                              child: Image.network(auxProduct.imagePath),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            auxProduct.name,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          auxProduct.address,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            auxProduct.address,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w400),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Divider(
-                          height: 4,
-                          color: Colors.black12,
-                          thickness: 1,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Divider(
+                            height: 4,
+                            color: Colors.black12,
+                            thickness: 1,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Descrição',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Descrição',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          auxProduct.description,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            auxProduct.description,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w400),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Divider(
-                          height: 4,
-                          color: Colors.black12,
-                          thickness: 1,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Divider(
+                            height: 4,
+                            color: Colors.black12,
+                            thickness: 1,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Categoria',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Categoria',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          cats,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w400),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            cats,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w400),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              default:
-                return Text('Caiu no Default');
-            }
-          },
-        ));
+                      ],
+                    ),
+                  );
+                default:
+                  return Text('Caiu no Default');
+              }
+            },
+          )),
+    );
   }
 
   abrirGoogleMaps() async {

@@ -4,14 +4,27 @@ import 'package:loja_virtual/src/models/user_model.dart';
 import 'package:loja_virtual/src/shared/widgets/drawer_auth_widget.dart';
 import 'package:loja_virtual/src/views/ProductAuth/product_details_auth_page.dart';
 
-class HomeAuthPage extends StatelessWidget {
+class HomeAuthPage extends StatefulWidget {
   HomeAuthPage({Key? key, required this.userModel}) : super(key: key);
   final UserModel userModel;
+
+  @override
+  _HomeAuthPageState createState() => _HomeAuthPageState();
+}
+
+class _HomeAuthPageState extends State<HomeAuthPage> {
   late ProductService auxProductService;
+  UserModel? user;
+
+  @override
+  void initState() {
+    user = widget.userModel;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    auxProductService = userModel.productService!;
+    auxProductService = user!.productService!;
     return WillPopScope(
       onWillPop: () async {
         return await showDialog(
@@ -39,9 +52,9 @@ class HomeAuthPage extends StatelessWidget {
           title: Text('Início'),
         ),
         drawer: DrawerAuthWidget(
-          userEmail: userModel.email,
-          urlImage: userModel.productService!.imagePath,
-          establishmentName: userModel.productService!.name,
+          userEmail: widget.userModel.email,
+          urlImage: widget.userModel.productService!.imagePath,
+          establishmentName: widget.userModel.productService!.name,
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -87,7 +100,7 @@ class HomeAuthPage extends StatelessWidget {
                             height: 244,
                             width: 244,
                             child: Image.network(
-                              userModel.productService!.imagePath,
+                              widget.userModel.productService!.imagePath,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -133,12 +146,14 @@ class HomeAuthPage extends StatelessWidget {
             final result = await Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => ProductServiceDetailsAuth(
                       auxProductService,
-                      productId: userModel.establishmentKey,
+                      productId: widget.userModel.establishmentKey,
                     )));
 
             if (result != null) {
               auxProductService = result;
+              user = user!.copyWith(productService: auxProductService);
             }
+            setState(() {});
           },
           child: Icon(Icons.edit),
         ),
