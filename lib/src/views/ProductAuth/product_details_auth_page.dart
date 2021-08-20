@@ -35,8 +35,10 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
     return WillPopScope(
       onWillPop: () {
         setState(() {});
-        return Future.delayed(Duration(milliseconds: 100))
-            .then((value) => true);
+        return Future.delayed(Duration(milliseconds: 100)).then((value) {
+          Navigator.pop(context, auxProduct);
+          return true;
+        });
       },
       child: Scaffold(
           appBar: AppBar(

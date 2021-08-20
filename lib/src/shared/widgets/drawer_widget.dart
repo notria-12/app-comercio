@@ -19,7 +19,7 @@ class DrawerWidget extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8),
             width: double.maxFinite,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
@@ -30,7 +30,7 @@ class DrawerWidget extends StatelessWidget {
                   child: Image.asset('assets/img/stablishment_logo.png'),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 Text(
                   "Possui algum estabelecimento?",
