@@ -57,7 +57,10 @@ class DrawerWidget extends StatelessWidget {
                         fontSize: 14,
                         decoration: TextDecoration.underline),
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
               ],
             ),
           ),

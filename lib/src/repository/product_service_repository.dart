@@ -10,6 +10,15 @@ class ProductServiceRepository {
     return snap.value;
   }
 
+  Stream<List<ProductService>> getDataGeneral() async* {
+    try {
+      yield* productServiceReference.onValue.map((event) =>
+          event.snapshot.value.map((e) => ProductService.fromMap(e)));
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future updateData(
       String stablishmentId, ProductService productService) async {
     await productServiceReference

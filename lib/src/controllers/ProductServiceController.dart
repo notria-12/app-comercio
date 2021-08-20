@@ -4,7 +4,7 @@ import 'package:loja_virtual/src/repository/product_service_repository.dart';
 class ProductServiceController {
   final productServiceData = ProductServiceRepository();
 
-  Future<List<ProductService>> getProductServiceList() async {
+  Future<List<ProductService>> getProductServiceList() {
     List<ProductService> prdtServices = [];
 
     return productServiceData.getData().then((productServices) {
@@ -12,6 +12,7 @@ class ProductServiceController {
         prdtServices.add(ProductService.fromMap(v));
       });
       return prdtServices;
+      // return productServiceData.getDataGeneral();
     }).catchError((err) {
       print('ERRO list productservices ${err.msg}');
     });

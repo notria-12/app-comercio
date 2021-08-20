@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/Home/home_page.dart';
 // import 'package:loja_virtual/src/views/Login/login_page.dart';
 
 class DrawerAuthWidget extends StatelessWidget {
@@ -100,9 +101,12 @@ class DrawerAuthWidget extends StatelessWidget {
                       SizedBox(height: 16),
                       new GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop(true);
-                          Navigator.of(context).pop(true);
-                          Navigator.of(context).pop(true);
+                          // Navigator.of(context).pop(true);
+                          // Navigator.of(context).pop(true);
+                          // Navigator.of(context).pop(true);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (_) => HomePage()),
+                              (route) => false);
                         },
                         child: Text("SIM"),
                       ),
