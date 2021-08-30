@@ -1,34 +1,92 @@
 {
   "project_info": {
-    "project_number": "658304037314",
-    "firebase_url": "https://teste-3a38d-default-rtdb.firebaseio.com",
-    "project_id": "teste-3a38d",
-    "storage_bucket": "teste-3a38d.appspot.com"
+    "project_number": "294855933328",
+    "firebase_url": "https://comercio-6d23d-default-rtdb.firebaseio.com",
+    "project_id": "comercio-6d23d",
+    "storage_bucket": "comercio-6d23d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:658304037314:android:18a04edfee0499b17ae65b",
+        "mobilesdk_app_id": "1:294855933328:android:77f465d029c6ede9f18715",
         "android_client_info": {
-          "package_name": "com.example.loja_virtual"
+          "package_name": "com.example.comercio2"
         }
       },
       "oauth_client": [
         {
-          "client_id": "658304037314-bfoi40cip7ikrl7c6khrneacigra32dt.apps.googleusercontent.com",
+          "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCEggB33EKRw4TR-RBc9y2dySnGtX8PVhs"
+          "current_key": "AIzaSyAYp5BzsLILv_uU_8mryaTDo6XRopNtlvg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "658304037314-bfoi40cip7ikrl7c6khrneacigra32dt.apps.googleusercontent.com",
+              "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294855933328:android:c60d032ba87185c2f18715",
+        "android_client_info": {
+          "package_name": "com.example.loja_virtual"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYp5BzsLILv_uU_8mryaTDo6XRopNtlvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294855933328:android:5d2282fcc3ff12ddf18715",
+        "android_client_info": {
+          "package_name": "com.flutter.comercio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYp5BzsLILv_uU_8mryaTDo6XRopNtlvg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294855933328-n3uajrje9gl6hod8rs8c37jeqtucn0jt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
