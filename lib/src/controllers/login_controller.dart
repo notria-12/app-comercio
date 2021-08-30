@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loja_virtual/src/models/user_model.dart';
 import 'package:loja_virtual/src/repository/login_repository.dart';
 
@@ -12,6 +11,19 @@ class LoginController {
           await loginRepository.login(email: email, password: password);
 
       return user;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<UserModel> createAccount(
+      {required String email,
+      required String password,
+      required String establishmentKey}) async {
+    try {
+      UserModel userModel = await loginRepository.createAcconut(
+          email: email, password: password, establishmentKey: establishmentKey);
+      return userModel;
     } catch (e) {
       throw e;
     }

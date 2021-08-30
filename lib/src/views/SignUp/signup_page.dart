@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/controllers/login_controller.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -10,7 +11,14 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  // TextEditingController _confirmPasswordController = TextEditingController();
+  String _accessKey = "";
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -60,6 +68,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               return "Informe uma chave válida";
                             }
                           },
+                          onSaved: (input) {
+                            _accessKey = input!;
+                          },
                           decoration: InputDecoration(
                               hintText: 'Chave de acesso',
                               labelText: 'Chave de acesso',
@@ -105,9 +116,26 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 15,
                         ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
+                              print(_passwordController.text);
+                              print(_emailController.text);
+                              print(_accessKey);
+
+                              try {
+                                await LoginController().createAccount(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    establishmentKey: _accessKey);
+                              } catch (e) {
+                                print(e);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(e.toString()),
+                                  ),
+                                );
+                              }
                             }
                             //   Navigator.of(context).pushReplacement(
                             //       MaterialPageRoute(
