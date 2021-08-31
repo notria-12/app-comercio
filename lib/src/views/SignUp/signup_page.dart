@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/src/views/HomeAuth/home_auth.dart';
+import 'package:loja_virtual/src/controllers/login_controller.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -9,6 +9,18 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  String _accessKey = "";
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,41 +52,61 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Align(
-                  //   child: Text(
-                  //     'Nome APP',
-                  //     style: TextStyle(
-                  //         color: Colors.blue,
-                  //         fontSize: 32,
-                  //         fontWeight: FontWeight.bold),
-                  //   ),
-                  //   alignment: Alignment.topLeft,
-                  // ),
                   SizedBox(
                     height: 50,
                   ),
                   Form(
+                    key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
+                          validator: (input) {
+                            if (input!.isEmpty) {
+                              return "A chave é obrigatória!";
+                            }
+                            if (!input.startsWith('-') && input.length < 10) {
+                              return "Informe uma chave válida";
+                            }
+                          },
+                          onSaved: (input) {
+                            _accessKey = input!;
+                          },
                           decoration: InputDecoration(
                               hintText: 'Chave de acesso',
                               labelText: 'Chave de acesso',
                               suffixIcon: Icon(Icons.vpn_key)),
                         ),
                         TextFormField(
+                          controller: _emailController,
+                          validator: validateEmail,
                           decoration: InputDecoration(
                               hintText: 'E-mail',
                               labelText: 'E-mail',
                               suffixIcon: Icon(Icons.email)),
                         ),
                         TextFormField(
+                          obscureText: true,
+                          controller: _passwordController,
+                          validator: (input) {
+                            if (input!.isEmpty) {
+                              return "A senha não pode ser vazia";
+                            }
+                            if (input.length < 6) {
+                              return "A senha precisa ter pelo menos 6 caracteres";
+                            }
+                          },
                           decoration: InputDecoration(
                               hintText: 'Senha',
                               labelText: 'Senha',
                               suffixIcon: Icon(Icons.lock)),
                         ),
                         TextFormField(
+                          obscureText: true,
+                          validator: (input) {
+                            if (input != _passwordController.text) {
+                              return "As senhas não se coincidem!";
+                            }
+                          },
                           decoration: InputDecoration(
                               hintText: 'Confirmar senha',
                               labelText: 'Confirmar senha',
@@ -83,28 +115,28 @@ class _SignUpPageState extends State<SignUpPage> {
                         SizedBox(
                           height: 15,
                         ),
-                        // Align(
-                        //   alignment: Alignment.centerRight,
-                        //   child: InkWell(
-                        //     onTap: () {},
-                        //     child: Container(
-                        //       padding: EdgeInsets.symmetric(
-                        //           vertical: 2, horizontal: 10),
-                        //       decoration: BoxDecoration(
-                        //           borderRadius: BorderRadius.circular(15),
-                        //           border: Border.all(color: Colors.blue)),
-                        //       child: Text(
-                        //         'ESQUECI A SENHA',
-                        //         style: TextStyle(
-                        //             fontSize: 10,
-                        //             fontFamily: 'Roboto',
-                        //             fontWeight: FontWeight.w500),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              print(_passwordController.text);
+                              print(_emailController.text);
+                              print(_accessKey);
+
+                              try {
+                                await LoginController().createAccount(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    establishmentKey: _accessKey);
+                              } catch (e) {
+                                print(e);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(e.toString()),
+                                  ),
+                                );
+                              }
+                            }
                             //   Navigator.of(context).pushReplacement(
                             //       MaterialPageRoute(
                             //           builder: (_) => HomeAuthPage()));
@@ -133,33 +165,6 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(
                     height: 50,
                   ),
-                  // Container(
-                  //     width: double.maxFinite,
-                  //     child: Center(
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           Text(
-                  //             'No possui cadastro? ',
-                  //             style: TextStyle(
-                  //                 fontSize: 14,
-                  //                 fontFamily: 'Roboto',
-                  //                 fontWeight: FontWeight.w500),
-                  //           ),
-                  //           InkWell(
-                  //             onTap: () {},
-                  //             child: Text(
-                  //               'Cadastrar',
-                  //               style: TextStyle(
-                  //                   color: Colors.blue,
-                  //                   fontSize: 14,
-                  //                   fontFamily: 'Roboto',
-                  //                   fontWeight: FontWeight.w500),
-                  //             ),
-                  //           )
-                  //         ],
-                  //       ),
-                  //     ))
                 ],
               ),
             ),
@@ -167,5 +172,19 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+  String? validateEmail(String? email, {bool? result = true}) {
+    var emailPatter = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    print("Result $result");
+    if (email!.isEmpty) {
+      return "Insira um endereço de email";
+    } else if (!emailPatter.hasMatch(email)) {
+      return "e-mail inválido";
+    } else if (!result!) {
+      // print(email);
+      return "Não existe uma conta com esse email";
+    }
   }
 }

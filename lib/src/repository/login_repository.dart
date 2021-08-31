@@ -39,7 +39,7 @@ class LoginRepository {
     }
   }
 
-  Future<User> createAcconut(
+  Future<UserModel> createAcconut(
       {required String email,
       required String password,
       required establishmentKey}) async {
@@ -57,17 +57,38 @@ class LoginRepository {
 
           await _db
               .reference()
-              .child("users")
+              .child("usuarios")
               .child(user!.uid)
               .set({"email": user!.email, "est_id": establishmentKey});
 
-          return user!;
+          UserModel userModel = UserModel(
+              email: email,
+              establishmentKey: establishmentKey,
+              productService: ProductService.fromMap(result.value));
+
+          return userModel;
         } else {
-          return user!;
+          throw Exception('Chave inválida');
         }
       }).catchError((error) => throw error);
     } catch (e) {
       throw e;
     }
+  }
+
+  Future<bool> hasUsedKey(String establishmentKey) async {
+    return await _db
+        .reference()
+        .child("usuarios")
+        .orderByChild('est_id')
+        .equalTo(establishmentKey)
+        .get()
+        .then((snapResult) {
+      if (snapResult!.value != null) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 }
