@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
@@ -25,6 +26,9 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
   late Future<List<Category>> _categories;
   late ProductService auxProduct;
   File? newFile;
+  List<File> photos = [];
+
+  PageController pageController = PageController();
 
   @override
   void initState() {
@@ -38,6 +42,13 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
   showPreview(File file) async {
     newFile = await Navigator.of(context)
         .push(MaterialPageRoute(builder: (_) => PreviewPage(file: file)));
+
+    if (newFile != null) {
+      setState(() {
+        photos.add(newFile!);
+      });
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -109,19 +120,95 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                         Container(
                             height: MediaQuery.of(context).size.height * 0.4,
                             color: Colors.black12,
-                            child: Center(
-                              child: Image.network(auxProduct.imagePath),
+                            child: Stack(
+                              children: [
+                                PageView(
+                                  controller: pageController,
+                                  children: [
+                                    Container(
+                                      child:
+                                          Image.network(auxProduct.imagePath),
+                                    ),
+                                    ...photos.map((photo) => Image.file(photo))
+                                  ],
+                                ),
+                                Positioned(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    left: 10,
+                                    child: InkWell(
+                                      onTap: () {
+                                        pageController.previousPage(
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            curve: Curves.linear);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            shape: BoxShape.circle),
+                                        height: 50,
+                                        width: 50,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.arrow_back_ios,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    )),
+                                Positioned(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    right: 10,
+                                    child: InkWell(
+                                      onTap: () {
+                                        pageController.nextPage(
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            curve: Curves.linear);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            shape: BoxShape.circle),
+                                        height: 50,
+                                        width: 50,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ))
+                              ],
                             )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => CameraCamera(
-                                            onFile: (file) =>
-                                                showPreview(file))));
+                              onPressed: () async {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => CameraCamera(
+                                //             onFile: (file) =>
+                                //                 showPreview(file))));
+                                final ImagePicker _picker = ImagePicker();
+                                var imageFile = await _picker.pickImage(
+                                  source: ImageSource.camera,
+                                  maxHeight: 1280,
+                                  maxWidth: 960,
+                                  imageQuality: 50,
+                                );
+
+                                if (imageFile != null) {
+                                  setState(() {
+                                    photos.add(File(imageFile.path));
+                                  });
+                                }
                               },
                               icon: Icon(Icons.camera_alt),
                               label: Text('Adicionar foto')),

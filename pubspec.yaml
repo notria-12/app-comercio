@@ -36,6 +36,8 @@ dependencies:
   url_launcher: ^6.0.7
   shared_preferences: ^2.0.6
   camera_camera: ^2.0.2
+  firebase_storage: ^10.0.3
+  image_picker: ^0.8.3+3
   
 
 
