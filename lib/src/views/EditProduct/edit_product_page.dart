@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
+import 'package:camera_camera/camera_camera.dart';
 
 class EditProductPage extends StatefulWidget {
   const EditProductPage(
@@ -72,6 +73,9 @@ class _EditProductPageState extends State<EditProductPage> {
                               name = val;
                             },
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           TextFormField(
                             decoration: InputDecoration(
                               hintText: 'Endereço',
@@ -82,16 +86,37 @@ class _EditProductPageState extends State<EditProductPage> {
                               address = val;
                             },
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
                           TextFormField(
+                            maxLines: 6,
+                            maxLength: 600,
                             decoration: InputDecoration(
-                              hintText: 'Descrição',
-                              labelText: 'Descrição',
-                            ),
+                                hintText: 'Descrição',
+                                labelText: 'Descrição',
+                                border: OutlineInputBorder()),
                             initialValue: description,
                             onSaved: (String? val) {
                               description = val;
                             },
                           ),
+                          ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => CameraCamera(
+                                              onFile: (file) {
+                                                // photos.add(file);
+                                                //When take foto you should close camera
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                            )));
+                              },
+                              icon: Icon(Icons.camera_alt),
+                              label: Text('Câmera'))
                         ],
                       ))
                 ],
