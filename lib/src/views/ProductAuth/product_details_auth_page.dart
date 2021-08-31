@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/views/EditProduct/edit_product_page.dart';
+import 'package:loja_virtual/src/views/ProductAuth/preview_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductServiceDetailsAuth extends StatefulWidget {
@@ -20,6 +24,7 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
   final categoryController = CategoryController();
   late Future<List<Category>> _categories;
   late ProductService auxProduct;
+  File? newFile;
 
   @override
   void initState() {
@@ -28,6 +33,11 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
     _categories =
         categoryController.getCategoryForId(widget._productService.catIds);
     auxProduct = widget._productService;
+  }
+
+  showPreview(File file) async {
+    newFile = await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => PreviewPage(file: file)));
   }
 
   @override
@@ -102,6 +112,20 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                             child: Center(
                               child: Image.network(auxProduct.imagePath),
                             )),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => CameraCamera(
+                                            onFile: (file) =>
+                                                showPreview(file))));
+                              },
+                              icon: Icon(Icons.camera_alt),
+                              label: Text('Adicionar foto')),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
