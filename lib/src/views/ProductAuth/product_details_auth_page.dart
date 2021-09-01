@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:camera_camera/camera_camera.dart';
+// import 'package:camera_camera/camera_camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
@@ -9,6 +9,7 @@ import 'package:loja_virtual/src/models/ProductService.dart';
 import 'package:loja_virtual/src/views/EditProduct/edit_product_page.dart';
 import 'package:loja_virtual/src/views/ProductAuth/preview_page.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProductServiceDetailsAuth extends StatefulWidget {
   final ProductService _productService;
@@ -39,15 +40,27 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
     auxProduct = widget._productService;
   }
 
-  showPreview(File file) async {
-    newFile = await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => PreviewPage(file: file)));
+  // showPreview(File file) async {
+  //   newFile = await Navigator.of(context)
+  //       .push(MaterialPageRoute(builder: (_) => PreviewPage(file: file)));
 
-    if (newFile != null) {
-      setState(() {
-        photos.add(newFile!);
-      });
-      Navigator.of(context).pop();
+  //   if (newFile != null) {
+  //     setState(() {
+  //       photos.add(newFile!);
+  //     });
+  //     Navigator.of(context).pop();
+  //   }
+  // }
+
+  Future uploadImageToFirebase(File file, int number) async {
+    try {
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('img/${widget.productId}/image-$number');
+      firebaseStorageRef.putFile(file);
+      print("Deu certo");
+    } catch (e) {
+      print('Deu errado');
     }
   }
 
@@ -188,30 +201,38 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                             )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (_) => CameraCamera(
-                                //             onFile: (file) =>
-                                //                 showPreview(file))));
-                                final ImagePicker _picker = ImagePicker();
-                                var imageFile = await _picker.pickImage(
-                                  source: ImageSource.camera,
-                                  maxHeight: 1280,
-                                  maxWidth: 960,
-                                  imageQuality: 50,
-                                );
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton.icon(
+                                  onPressed: () async {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (_) => CameraCamera(
+                                    //             onFile: (file) =>
+                                    //                 showPreview(file))));
+                                    final ImagePicker _picker = ImagePicker();
+                                    var imageFile = await _picker.pickImage(
+                                      source: ImageSource.camera,
+                                      maxHeight: 1280,
+                                      maxWidth: 960,
+                                      imageQuality: 50,
+                                    );
 
-                                if (imageFile != null) {
-                                  setState(() {
-                                    photos.add(File(imageFile.path));
-                                  });
-                                }
-                              },
-                              icon: Icon(Icons.camera_alt),
-                              label: Text('Adicionar foto')),
+                                    if (imageFile != null) {
+                                      uploadImageToFirebase(
+                                          File(imageFile.path),
+                                          photos.length + 1);
+                                      setState(() {
+                                        photos.add(File(imageFile.path));
+                                      });
+                                    }
+                                  },
+                                  icon: Icon(Icons.camera_alt),
+                                  label: Text('Adicionar foto')),
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

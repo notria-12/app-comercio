@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/controllers/ProductServiceController.dart';
 import 'package:loja_virtual/src/models/ProductService.dart';
-import 'package:camera_camera/camera_camera.dart';
+// import 'package:camera_camera/camera_camera.dart';
 
 class EditProductPage extends StatefulWidget {
   const EditProductPage(
@@ -103,17 +103,17 @@ class _EditProductPageState extends State<EditProductPage> {
                           ),
                           ElevatedButton.icon(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => CameraCamera(
-                                              onFile: (file) {
-                                                // photos.add(file);
-                                                //When take foto you should close camera
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                            )));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (_) => CameraCamera(
+                                //               onFile: (file) {
+                                //                 // photos.add(file);
+                                //                 //When take foto you should close camera
+                                //                 Navigator.pop(context);
+                                //                 setState(() {});
+                                //               },
+                                //             )));
                               },
                               icon: Icon(Icons.camera_alt),
                               label: Text('Câmera'))
