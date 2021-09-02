@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class ProductService {
   String? id;
+  String? link;
   String _imagePath;
   String _name;
   String _address;
@@ -25,7 +26,8 @@ class ProductService {
       this._phoneNumber2,
       this._catIds,
       this._description,
-      {this.id});
+      {this.id,
+      this.link});
 
   String get name => _name;
   String get imagePath => _imagePath;
@@ -47,7 +49,8 @@ class ProductService {
       'est_catid': _catIds,
       'est_telefone01': _phoneNumber,
       'est_telefone02': _phoneNumber2,
-      'descricao': _description
+      'descricao': _description,
+      'est_link': link ?? ''
     };
   }
 
@@ -65,6 +68,7 @@ class ProductService {
           return cat.toString();
         }).toList(),
         map['descricao'] ?? '',
+        link: map['est_link'] ?? '',
         id: id);
   }
 
@@ -79,27 +83,27 @@ class ProductService {
   @override
   int get hashCode => _imagePath.hashCode ^ _name.hashCode;
 
-  ProductService copyWith({
-    String? imagePath,
-    String? name,
-    String? address,
-    double? latitude,
-    double? longitude,
-    String? phoneNumber,
-    String? phoneNumber2,
-    List<dynamic>? catIds,
-    String? description,
-  }) {
+  ProductService copyWith(
+      {String? imagePath,
+      String? name,
+      String? address,
+      double? latitude,
+      double? longitude,
+      String? phoneNumber,
+      String? phoneNumber2,
+      List<dynamic>? catIds,
+      String? description,
+      String? linkExtra}) {
     return ProductService(
-      imagePath ?? this._imagePath,
-      name ?? this._name,
-      address ?? this._address,
-      latitude ?? this._latitude,
-      longitude ?? this._longitude,
-      phoneNumber ?? this._phoneNumber,
-      phoneNumber2 ?? this._phoneNumber2,
-      catIds ?? this._catIds,
-      description ?? this._description,
-    );
+        imagePath ?? this._imagePath,
+        name ?? this._name,
+        address ?? this._address,
+        latitude ?? this._latitude,
+        longitude ?? this._longitude,
+        phoneNumber ?? this._phoneNumber,
+        phoneNumber2 ?? this._phoneNumber2,
+        catIds ?? this._catIds,
+        description ?? this._description,
+        link: linkExtra ?? link);
   }
 }

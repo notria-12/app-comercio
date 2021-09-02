@@ -71,11 +71,10 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
                 },
                 child: FaIcon(FontAwesomeIcons.whatsapp)),
             FloatingActionButton(
-                onPressed: () async {
-                  var urls = await loadImages();
-                  print(urls);
+                onPressed: () {
+                  _launchURL();
                 },
-                child: FaIcon(FontAwesomeIcons.search))
+                child: FaIcon(FontAwesomeIcons.globe))
           ],
           distance: 100,
         ),
@@ -303,7 +302,9 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
     if (await canLaunch(urlMap)) {
       await launch(urlMap);
     } else {
-      throw 'Could not launch Maps';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Indisponível no momento"),
+      ));
     }
   }
 
@@ -318,10 +319,18 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
       if (await canLaunch(whatsappUrl)) {
         await launch(whatsappUrl);
       } else {
-        throw 'Could not launch $whatsappUrl';
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("O estabelecimento não possui whatsapp"),
+        ));
       }
     }
   }
+
+  void _launchURL() async => await canLaunch(widget._productService.link!)
+      ? await launch(widget._productService.link!)
+      : ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("O estabelecimento não possui site"),
+        ));
 
   fazerLigacao() async {
     String number =
@@ -331,7 +340,9 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("O estabelecimento não possui numero para ligação"),
+      ));
     }
   }
 }

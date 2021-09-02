@@ -15,7 +15,7 @@ class EditProductPage extends StatefulWidget {
 }
 
 class _EditProductPageState extends State<EditProductPage> {
-  String? name, address, description;
+  String? name, address, description, link;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -23,6 +23,7 @@ class _EditProductPageState extends State<EditProductPage> {
     name = widget.productService.name;
     address = widget.productService.address;
     description = widget.productService.description;
+    link = widget.productService.link;
 
     return WillPopScope(
       onWillPop: () async {
@@ -90,6 +91,19 @@ class _EditProductPageState extends State<EditProductPage> {
                             height: 10,
                           ),
                           TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'Link adicional',
+                              labelText: 'Link adicional',
+                            ),
+                            initialValue: link,
+                            onSaved: (String? val) {
+                              link = val;
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
                             maxLines: 6,
                             maxLength: 600,
                             decoration: InputDecoration(
@@ -101,22 +115,6 @@ class _EditProductPageState extends State<EditProductPage> {
                               description = val;
                             },
                           ),
-                          ElevatedButton.icon(
-                              onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (_) => CameraCamera(
-                                //               onFile: (file) {
-                                //                 // photos.add(file);
-                                //                 //When take foto you should close camera
-                                //                 Navigator.pop(context);
-                                //                 setState(() {});
-                                //               },
-                                //             )));
-                              },
-                              icon: Icon(Icons.camera_alt),
-                              label: Text('Câmera'))
                         ],
                       ))
                 ],
@@ -136,11 +134,12 @@ class _EditProductPageState extends State<EditProductPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print("Name $name");
-      print("Desc $description");
 
-      ProductService newProductService = widget.productService
-          .copyWith(name: name, description: description, address: address);
+      ProductService newProductService = widget.productService.copyWith(
+          name: name,
+          description: description,
+          address: address,
+          linkExtra: link);
 
       try {
         ProductServiceController productServiceController =
