@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
 import 'package:loja_virtual/src/models/Category.dart';
@@ -238,33 +239,65 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                                   }
                                 })),
                         Padding(
+                          padding: const EdgeInsets.only(left: 8.0, top: 8),
+                          child: Text("Adicionar Foto:",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600)),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              ElevatedButton.icon(
-                                  onPressed: () async {
-                                    final ImagePicker _picker = ImagePicker();
-                                    var imageFile = await _picker.pickImage(
-                                      source: ImageSource.camera,
-                                      maxHeight: 1280,
-                                      maxWidth: 960,
-                                      imageQuality: 50,
-                                    );
+                              SizedBox(
+                                child: ElevatedButton.icon(
+                                    onPressed: () async {
+                                      final ImagePicker _picker = ImagePicker();
+                                      var imageFile = await _picker.pickImage(
+                                        source: ImageSource.camera,
+                                        maxHeight: 1280,
+                                        maxWidth: 960,
+                                        imageQuality: 50,
+                                      );
 
-                                    if (imageFile != null) {
-                                      uploadImageToFirebase(
-                                          File(imageFile.path),
-                                          photos.length + urls!.length + 1);
-                                      setState(() {
-                                        photos.add(File(imageFile.path));
-                                        // pageController.jumpToPage(
-                                        //     photos.length + urls!.length + 1);
-                                      });
-                                    }
-                                  },
-                                  icon: Icon(Icons.camera_alt),
-                                  label: Text('Adicionar foto')),
+                                      if (imageFile != null) {
+                                        uploadImageToFirebase(
+                                            File(imageFile.path),
+                                            photos.length + urls!.length + 1);
+                                        setState(() {
+                                          photos.add(File(imageFile.path));
+                                          // pageController.jumpToPage(
+                                          //     photos.length + urls!.length + 1);
+                                        });
+                                      }
+                                    },
+                                    icon: Icon(Icons.camera_alt),
+                                    label: Text('Camera')),
+                              ),
+                              Text("Ou"),
+                              ElevatedButton.icon(
+                                onPressed: () async {
+                                  final ImagePicker _picker = ImagePicker();
+                                  var imageFile = await _picker.pickImage(
+                                    source: ImageSource.gallery,
+                                    maxHeight: 1280,
+                                    maxWidth: 960,
+                                    imageQuality: 50,
+                                  );
+
+                                  if (imageFile != null) {
+                                    uploadImageToFirebase(File(imageFile.path),
+                                        photos.length + urls!.length + 1);
+                                    setState(() {
+                                      photos.add(File(imageFile.path));
+                                      // pageController.jumpToPage(
+                                      //     photos.length + urls!.length + 1);
+                                    });
+                                  }
+                                },
+                                icon: Icon(Icons.file_present_sharp),
+                                label: Text('Galeria'),
+                              ),
                             ],
                           ),
                         ),

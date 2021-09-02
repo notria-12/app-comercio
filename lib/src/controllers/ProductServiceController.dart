@@ -23,10 +23,10 @@ class ProductServiceController {
 
     return productServiceData.getData().then((productServices) {
       productServices.forEach((k, v) {
-        var stablichment = ProductService.fromMap(v);
+        var stablichment = ProductService.fromMap(v, id: k);
         var result = stablichment.catIds.contains(catId);
         if (result) {
-          prdtServices.add(ProductService.fromMap(v));
+          prdtServices.add(stablichment);
         }
       });
       return prdtServices;
