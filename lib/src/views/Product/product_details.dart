@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loja_virtual/src/controllers/CategoryController.dart';
@@ -19,6 +20,7 @@ class ProductServiceDetails extends StatefulWidget {
 class _ProductServiceDetailsState extends State<ProductServiceDetails> {
   final categoryController = CategoryController();
   late Future<List<Category>> _categories;
+  PageController pageController = PageController();
 
   @override
   void initState() {
@@ -26,6 +28,16 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
 
     _categories =
         categoryController.getCategoryForId(widget._productService.catIds);
+  }
+
+  Future<List<String>> loadImages() async {
+    Reference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('img/${widget._productService.id}/');
+
+    var list = await firebaseStorageRef.listAll();
+
+    return Future.wait(list.items.map((ref) => ref.getDownloadURL()).toList());
   }
 
   @override
@@ -58,6 +70,12 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
                   abrirWhatsApp();
                 },
                 child: FaIcon(FontAwesomeIcons.whatsapp)),
+            FloatingActionButton(
+                onPressed: () async {
+                  var urls = await loadImages();
+                  print(urls);
+                },
+                child: FaIcon(FontAwesomeIcons.search))
           ],
           distance: 100,
         ),
@@ -105,10 +123,100 @@ class _ProductServiceDetailsState extends State<ProductServiceDetails> {
                       Container(
                           height: MediaQuery.of(context).size.height * 0.4,
                           color: Colors.black12,
-                          child: Center(
-                            child:
-                                Image.network(widget._productService.imagePath),
-                          )),
+                          child: FutureBuilder<List<String>>(
+                              future: loadImages(),
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  default:
+                                    if (snapshot.hasError) {
+                                      return Center(
+                                        child: Text('Erro ao carregar imagens'),
+                                      );
+                                    } else {
+                                      List<String>? urls = snapshot.data;
+
+                                      return Stack(children: [
+                                        PageView(
+                                          controller: pageController,
+                                          children: [
+                                            Center(
+                                              child: Image.network(widget
+                                                  ._productService.imagePath),
+                                            ),
+                                            ...urls!.map(
+                                                (url) => Image.network(url))
+                                          ],
+                                        ),
+                                        Visibility(
+                                          visible: urls.isNotEmpty,
+                                          child: Positioned(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              left: 10,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  pageController.previousPage(
+                                                      duration: Duration(
+                                                          milliseconds: 200),
+                                                      curve: Curves.linear);
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
+                                                      shape: BoxShape.circle),
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.arrow_back_ios,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                        Visibility(
+                                          visible: urls.isNotEmpty,
+                                          child: Positioned(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              right: 10,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  pageController.nextPage(
+                                                      duration: Duration(
+                                                          milliseconds: 200),
+                                                      curve: Curves.linear);
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
+                                                      shape: BoxShape.circle),
+                                                  height: 50,
+                                                  width: 50,
+                                                  child: Center(
+                                                    child: Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        )
+                                      ]);
+                                    }
+                                }
+                              })),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(

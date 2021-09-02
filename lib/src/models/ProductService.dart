@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class ProductService {
-  // String _id;
+  String? id;
   String _imagePath;
   String _name;
   String _address;
@@ -24,7 +24,8 @@ class ProductService {
       this._phoneNumber,
       this._phoneNumber2,
       this._catIds,
-      this._description);
+      this._description,
+      {this.id});
 
   String get name => _name;
   String get imagePath => _imagePath;
@@ -50,21 +51,21 @@ class ProductService {
     };
   }
 
-  factory ProductService.fromMap(Map map) {
+  factory ProductService.fromMap(Map map, {String? id}) {
     return ProductService(
-      map['est_urlimagem'] ??
-          'https://img.freepik.com/vetores-gratis/ilustracao-de-um-loja-padaria_53876-26746.jpg?size=338&ext=jpg',
-      map['est_fantasia'] ?? 'Sem nome',
-      map['est_address'] ?? 'Sem endereço',
-      map['est_latitude'] ?? 0,
-      map['est_longitude'] ?? 0,
-      map['est_telefone01'] ?? '',
-      map['est_telefone02'] ?? '',
-      map['est_catid'].map((cat) {
-        return cat.toString();
-      }).toList(),
-      map['descricao'] ?? '',
-    );
+        map['est_urlimagem'] ??
+            'https://img.freepik.com/vetores-gratis/ilustracao-de-um-loja-padaria_53876-26746.jpg?size=338&ext=jpg',
+        map['est_fantasia'] ?? 'Sem nome',
+        map['est_address'] ?? 'Sem endereço',
+        map['est_latitude'] ?? 0,
+        map['est_longitude'] ?? 0,
+        map['est_telefone01'] ?? '',
+        map['est_telefone02'] ?? '',
+        map['est_catid'].map((cat) {
+          return cat.toString();
+        }).toList(),
+        map['descricao'] ?? '',
+        id: id);
   }
 
   String toJson() => json.encode(toMap());

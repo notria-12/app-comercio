@@ -25,12 +25,12 @@ class LoginRepository {
         var establishment = await _db
             .reference()
             .child('estabelecimento')
-            .child(result.value['est_id'])
+            .child(result!.value['est_id'])
             .get();
         return UserModel(
             email: email,
             establishmentKey: result.value['est_id'],
-            productService: ProductService.fromMap(establishment.value));
+            productService: ProductService.fromMap(establishment!.value));
       });
       // return UserModel(email: email, establishmentKey: establishmentKey)!;
     } catch (e) {
@@ -84,7 +84,7 @@ class LoginRepository {
         .equalTo(establishmentKey)
         .get()
         .then((snapResult) {
-      if (snapResult.value != null) {
+      if (snapResult!.value != null) {
         return true;
       } else {
         return false;

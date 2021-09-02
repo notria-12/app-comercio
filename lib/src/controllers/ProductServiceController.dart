@@ -9,7 +9,7 @@ class ProductServiceController {
 
     return productServiceData.getData().then((productServices) {
       productServices.forEach((k, v) {
-        prdtServices.add(ProductService.fromMap(v));
+        prdtServices.add(ProductService.fromMap(v, id: k));
       });
       return prdtServices;
       // return productServiceData.getDataGeneral();
