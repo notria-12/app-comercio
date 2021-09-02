@@ -12,6 +12,7 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   String _accessKey = "";
+  bool loading = false;
 
   @override
   void dispose() {
@@ -119,23 +120,27 @@ class _SignUpPageState extends State<SignUpPage> {
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              print(_passwordController.text);
-                              print(_emailController.text);
-                              print(_accessKey);
-
+                              setState(() {
+                                loading = true;
+                              });
                               try {
                                 await LoginController().createAccount(
                                     email: _emailController.text,
                                     password: _passwordController.text,
                                     establishmentKey: _accessKey);
+                                loading = false;
+                                Navigator.of(context).pop(true);
                               } catch (e) {
                                 print(e);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(e.toString()),
+                                    content: Text("Erro ao cadastrar"),
                                   ),
                                 );
                               }
+                              setState(() {
+                                loading = false;
+                              });
                             }
                             //   Navigator.of(context).pushReplacement(
                             //       MaterialPageRoute(
@@ -149,14 +154,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.blue,
                                 borderRadius: BorderRadius.circular(5)),
                             child: Center(
-                                child: Text(
-                              'CADASTRAR',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Roboto',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
-                            )),
+                                child: loading
+                                    ? CircularProgressIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : Text(
+                                        'CADASTRAR',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Roboto',
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      )),
                           ),
                         )
                       ],

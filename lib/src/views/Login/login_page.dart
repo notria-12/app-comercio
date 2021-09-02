@@ -168,9 +168,17 @@ class _LoginPageState extends State<LoginPage> {
                                   fontWeight: FontWeight.w500),
                             ),
                             InkWell(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => SignUpPage()));
+                              onTap: () async {
+                                var result = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (_) => SignUpPage()));
+                                if (result == true) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content:
+                                        Text("Cadastro realizado com Sucesso!"),
+                                  ));
+                                }
                               },
                               child: Text(
                                 'Cadastrar',
