@@ -232,7 +232,32 @@ class _ProductServiceDetailsState extends State<ProductServiceDetailsAuth> {
                                                       ),
                                                     ),
                                                   )),
-                                            )
+                                            ),
+                                            Positioned(
+                                                top: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.03,
+                                                right: 10,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    //TODO: EXCLUIR FOTO
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                        shape: BoxShape.circle),
+                                                    height: 40,
+                                                    width: 40,
+                                                    child: Center(
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
                                           ],
                                         );
                                       }
