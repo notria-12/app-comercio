@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/shared/auth/auth_controller.dart';
+import 'package:loja_virtual/src/views/initial_page.dart';
 import 'src/views/Home/home_page.dart';
 
 void main() async {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage());
+        home: InitialPage());
   }
 }
 
