@@ -19,11 +19,19 @@ class ProductServiceController {
   }
 
   Future<List<ProductService>> getDataByCity({required String city}) {
-    try {
-      return productServiceData.getDataByCity(city: city);
-    } catch (e) {
-      throw e;
-    }
+    List<ProductService> prdtServices = [];
+
+    return productServiceData.getDataByCity(city: city).then((productServices) {
+      if (productServices != null) {
+        productServices.forEach((k, v) {
+          prdtServices.add(ProductService.fromMap(v, id: k));
+        });
+      }
+      return prdtServices;
+      // return productServiceData.getDataGeneral();
+    }).catchError((err) {
+      print('ERRO list productservices ${err.msg}');
+    });
   }
 
   Future<List<ProductService>> getStablichmentForCategory(String catId) async {

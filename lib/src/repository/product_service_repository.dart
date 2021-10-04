@@ -10,12 +10,17 @@ class ProductServiceRepository {
     return snap.value;
   }
 
-  Future<List<ProductService>> getDataByCity({required String city}) async {
+  Future getDataByCity({required String city}) async {
     return productServiceReference
-        .equalTo(city, key: "est_cidade")
+        .orderByChild("est_cidade")
+        .equalTo(city)
         .once()
         .then((snapProducts) {
-      return snapProducts.value.map((k, v) => ProductService.fromMap(v));
+      if (snapProducts.exists) {
+        return snapProducts.value;
+      } else {
+        return null;
+      }
     });
   }
 

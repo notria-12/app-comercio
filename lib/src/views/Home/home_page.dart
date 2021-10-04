@@ -196,7 +196,36 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Aconteceu um erro'),
+                    );
+                  }
                   if (snapshot.hasData) {
+                    if (snapshot.data![0].length == 0) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                                'Não temos nenhum estabelecimento cadastrado nessa cidade!',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Container(
+                                child:
+                                    Image.asset("assets/img/empty_state.png"))
+                          ],
+                        ),
+                      );
+                    }
                     productsList =
                         snapshot.data != null ? snapshot.data![0] : [];
                     categoriesList =
@@ -218,9 +247,10 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   } else {
-                    print(snapshot.error);
+                    // print(snapshot.error);
                     return Center(
-                      child: Text('Aconteceu um erro'),
+                      child: Text(
+                          'Não temos nenhuma estabelecimento cadastrado nessa cidade'),
                     );
                   }
                 default:

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:loja_virtual/src/controllers/city_controller.dart';
 import 'package:loja_virtual/src/models/city_model.dart';
 import 'package:loja_virtual/src/views/Home/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InitialPage extends StatefulWidget {
   InitialPage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _InitialPageState extends State<InitialPage> {
   late Future<List<City>> citiesList;
   String dropdownValue = "Selecione uma cidade";
   final _formKey = GlobalKey<FormState>();
+  late SharedPreferences _preferences;
 
   @override
   void initState() {
@@ -137,8 +139,10 @@ class _InitialPageState extends State<InitialPage> {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        _preferences = await SharedPreferences.getInstance();
+                        _preferences.setString("city", dropdownValue);
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) =>
                                 HomePage(cityName: dropdownValue)));

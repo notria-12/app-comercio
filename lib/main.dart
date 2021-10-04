@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:loja_virtual/src/shared/auth/auth_controller.dart';
+import 'package:loja_virtual/src/views/Home/home_page.dart';
 import 'package:loja_virtual/src/views/initial_page.dart';
-import 'src/views/Home/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: InitialPage());
+        home: SplashPage());
   }
 }
 
@@ -31,17 +31,40 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late SharedPreferences _preferences;
+
   @override
   void initState() {
-    AuthController.instance.init();
     super.initState();
+  }
+
+  Future<String?> getPreferences() async {
+    _preferences = await SharedPreferences.getInstance();
+    return _preferences.getString("city");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Status Login${AuthController.instance.state}");
     return Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+      body: FutureBuilder<String?>(
+        future: getPreferences(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+            case ConnectionState.none:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return HomePage(cityName: snapshot.data!);
+              }
+              return InitialPage();
+            default:
+              return Container();
+          }
+        },
+      ),
     );
   }
 }
