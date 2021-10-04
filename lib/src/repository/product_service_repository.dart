@@ -10,6 +10,15 @@ class ProductServiceRepository {
     return snap.value;
   }
 
+  Future<List<ProductService>> getDataByCity({required String city}) async {
+    return productServiceReference
+        .equalTo(city, key: "est_cidade")
+        .once()
+        .then((snapProducts) {
+      return snapProducts.value.map((k, v) => ProductService.fromMap(v));
+    });
+  }
+
   Stream<List<ProductService>> getDataGeneral() async* {
     try {
       yield* productServiceReference.onValue.map((event) =>

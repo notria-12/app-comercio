@@ -104,9 +104,9 @@ class DrawerAuthWidget extends StatelessWidget {
                           // Navigator.of(context).pop(true);
                           // Navigator.of(context).pop(true);
                           // Navigator.of(context).pop(true);
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (_) => HomePage()),
-                              (route) => false);
+                          // Navigator.of(context).pushAndRemoveUntil(
+                          //     MaterialPageRoute(builder: (_) => HomePage()),
+                          //     (route) => false);
                         },
                         child: Text("SIM"),
                       ),

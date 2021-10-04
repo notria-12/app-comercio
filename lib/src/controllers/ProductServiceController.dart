@@ -18,6 +18,14 @@ class ProductServiceController {
     });
   }
 
+  Future<List<ProductService>> getDataByCity({required String city}) {
+    try {
+      return productServiceData.getDataByCity(city: city);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   Future<List<ProductService>> getStablichmentForCategory(String catId) async {
     List<ProductService> prdtServices = [];
 

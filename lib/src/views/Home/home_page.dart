@@ -9,7 +9,8 @@ import 'package:loja_virtual/src/views/Category/category_page.dart';
 import 'package:loja_virtual/src/views/Product/product_details.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String cityName;
+  const HomePage({Key? key, required this.cityName}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,7 +30,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _futureProducts = productServiceController.getProductServiceList();
+    _futureProducts =
+        productServiceController.getDataByCity(city: widget.cityName);
     _futureCategories = categoryController.getCategoryList();
   }
 

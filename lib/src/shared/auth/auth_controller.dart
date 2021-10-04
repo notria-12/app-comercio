@@ -17,8 +17,8 @@ class AuthController {
   AuthController() {
     listen(() {
       if (AuthController.instance.state == AuthState.unauthenticated) {
-        navigatorKey.currentState!
-            .push(MaterialPageRoute(builder: (_) => HomePage()));
+        // navigatorKey.currentState!
+        //     .push(MaterialPageRoute(builder: (_) => HomePage()));
       } else if (AuthController.instance.state == AuthState.authenticated) {
         // navigatorKey.currentState!
         // .push(MaterialPageRoute(builder: (_) => HomeAuthPage()));
