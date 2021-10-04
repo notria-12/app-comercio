@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loja_virtual/src/views/Category/category_page.dart';
 import 'package:loja_virtual/src/views/Login/login_page.dart';
+import 'package:loja_virtual/src/views/initial_page.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);
@@ -85,6 +86,16 @@ class DrawerWidget extends StatelessWidget {
           () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => CategoryPage()));
+          },
+        ),
+        ItemDrawerWidget(
+          Icon(Icons.map, color: Color.fromRGBO(151, 151, 151, 1)),
+          'Mudar de cidade',
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => InitialPage()),
+            );
           },
         ),
         // ItemDrawerWidget(

@@ -143,9 +143,12 @@ class _InitialPageState extends State<InitialPage> {
                       if (_formKey.currentState!.validate()) {
                         _preferences = await SharedPreferences.getInstance();
                         _preferences.setString("city", dropdownValue);
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) =>
-                                HomePage(cityName: dropdownValue)));
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    HomePage(cityName: dropdownValue)),
+                            (Route<dynamic> route) => false);
                       }
                     },
                     child: Text("Avançar"),

@@ -7,6 +7,7 @@ import 'package:loja_virtual/src/shared/widgets/drawer_widget.dart';
 import 'package:loja_virtual/src/shared/widgets/product_card.dart';
 import 'package:loja_virtual/src/views/Category/category_page.dart';
 import 'package:loja_virtual/src/views/Product/product_details.dart';
+import 'package:loja_virtual/src/views/initial_page.dart';
 
 class HomePage extends StatefulWidget {
   final String cityName;
@@ -221,7 +222,18 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Container(
                                 child:
-                                    Image.asset("assets/img/empty_state.png"))
+                                    Image.asset("assets/img/empty_state.png")),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => InitialPage()));
+                                },
+                                child: Text("Mudar de cidade"))
                           ],
                         ),
                       );
