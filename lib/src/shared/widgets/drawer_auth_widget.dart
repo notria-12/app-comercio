@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/src/views/Adverts/adverts_page.dart';
 import 'package:loja_virtual/src/views/Home/home_page.dart';
 // import 'package:loja_virtual/src/views/Login/login_page.dart';
 
@@ -81,6 +82,15 @@ class DrawerAuthWidget extends StatelessWidget {
           'Meu Estabelecimento',
           () {
             print('clicou');
+          },
+        ),
+        ItemDrawerWidget(
+          Icon(Icons.new_releases, color: Color.fromRGBO(151, 151, 151, 1)),
+          'Meus Anúncios',
+          () {
+            Navigator.of(context).pop();
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => AdvertsPage()));
           },
         ),
         ItemDrawerWidget(
